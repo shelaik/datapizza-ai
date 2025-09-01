@@ -30,13 +30,12 @@ Here's a basic example demonstrating how to use agents in `datapizza-ai`:
 
 ```python
 from datapizza.agents import Agent
-from datapizza.clients.openai_client import OpenAIClient
+from datapizza.clients import OpenAIClient
 
 client = OpenAIClient(api_key="YOUR_API_KEY")
 
 agent = Agent(
     name="datapizza_agent",
-    system_prompt="You are an helpfull assistant",
     client=client,
 )
 
