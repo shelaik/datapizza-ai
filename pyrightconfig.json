@@ -1,0 +1,22 @@
+{
+  "include": [
+    "datapizza-ai-core",
+    "datapizza-ai-clients",
+    "datapizza-ai-embedders",
+    "datapizza-ai-modules",
+    "datapizza-ai-vectorstores",
+    "datapizza-ai-cache",
+    "datapizza-ai-tools",
+    "datapizza-ai-eval"
+  ],
+  "exclude": [
+    "**/tests",
+    "build",
+    "**/voice"
+  ],
+  "reportMissingImports": true,
+  "typeCheckingMode": "basic",
+  "pythonVersion": "3.11",
+  "venvPath": ".",
+  "venv": ".venv"
+}

@@ -1,0 +1,48 @@
+constants: 
+  PROMPT : "You are a helpful assistant that captions tables."
+  PROMPT_TABLE : "You are a helpful assistant that captions tables."
+  PROMPT_FIGURE : "You are a helpful assistant that captions figures."
+
+
+ingestion_pipeline:
+  clients:
+    openai_client:
+      provider: openai
+      model: "gpt-4o-mini"
+      api_key: "1234567890"
+    openai_embedder:
+      provider: openai
+      model: "text-embedding-3-small"
+      api_key: "1234567890"
+
+
+  modules:
+    - name: parser
+      type: TextParser
+      module: datapizza.modules.parsers
+    - name: captioner
+      type: LLMCaptioner
+      module: datapizza.modules.captioners
+      params:
+        client: openai_client
+        system_prompt_table: "${PROMPT_TABLE}"
+        system_prompt_figure: "${PROMPT_FIGURE}"
+    - name: node_splitter
+      type: NodeSplitter
+      module: datapizza.modules.splitters
+      params:
+        max_char: 5000
+    - name: embedder1
+      type: ClientEmbedder
+      module: datapizza.embedders
+      params:
+        client: openai_embedder
+
+  vector_store:
+    type: QdrantVectorstore
+    module: datapizza.vectorstores.qdrant
+    params:
+      host: "localhost"
+      port: 6333
+
+  collection_name: "test"

@@ -1,0 +1,18 @@
+nav:
+    - parsers.md
+    - llm_treebuilder.md
+    - captioners.md
+    - splitters.md
+    - metatagger.md
+    - embedders.md
+    - vectorstores.md
+
+    - rewriters.md
+    - rerankers.md
+
+    - prompt.md
+
+    - rag_example.md
+ 
+
+

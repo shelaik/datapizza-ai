@@ -1,0 +1,136 @@
+# Build system configuration
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Project metadata
+[project]
+name = "datapizza-ai"
+version = "0.0.1"
+description = "The first Datapizza framework for AI Development"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Datapizza", email = "datapizza@datapizza.tech"}
+]
+requires-python = ">=3.10.0,<4"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "datapizza-ai-core>=0.0.1",
+    "datapizza-ai-clients-openai>=0.0.1",
+    "datapizza-ai-embedders-openai>=0.0.1",
+    "datapizza-ai-vectorstores-qdrant>=0.0.1",
+]
+
+# Development dependencies
+[dependency-groups]
+dev = [
+    "deptry>=0.23.0",
+    "pytest",
+    "ruff>=0.11.5",
+]
+
+# UV workspace configuration
+[tool.uv.workspace]
+members = [
+    # Core
+    "datapizza-ai-core",
+    
+    # Clients
+    "datapizza-ai-clients/datapizza-ai-clients-anthropic",
+    "datapizza-ai-clients/datapizza-ai-clients-google",
+    "datapizza-ai-clients/datapizza-ai-clients-mistral",
+    "datapizza-ai-clients/datapizza-ai-clients-openai",
+    "datapizza-ai-clients/datapizza-ai-clients-openai-completion",
+    
+    # Embedders
+    "datapizza-ai-embedders/cohere",
+    "datapizza-ai-embedders/fastembedder",
+    "datapizza-ai-embedders/google",
+    "datapizza-ai-embedders/openai",
+    
+    # Modules
+    "datapizza-ai-modules/parsers/azure",
+    #"datapizza-ai-modules/parsers/docling",
+    "datapizza-ai-modules/rerankers/cohere",
+    "datapizza-ai-modules/rerankers/together",
+    
+    # Vectorstores
+    "datapizza-ai-vectorstores/datapizza-ai-vectorstores-qdrant",
+    
+    # Cache
+    "datapizza-ai-cache/redis",
+
+    # Tools
+    "datapizza-ai-tools/duckduckgo"
+]
+
+[tool.uv.sources]
+# Core
+datapizza-ai-core = {workspace = true}
+
+# Clients
+datapizza-ai-clients-anthropic = {workspace = true}
+datapizza-ai-clients-google = {workspace = true}
+datapizza-ai-clients-mistral = {workspace = true}
+datapizza-ai-clients-openai = {workspace = true}
+datapizza-ai-clients-openai-completion = {workspace = true}
+
+# Embedders
+datapizza-ai-embedders-cohere = {workspace = true}
+datapizza-ai-embedders-fastembedder = {workspace = true}
+datapizza-ai-embedders-google = {workspace = true}
+datapizza-ai-embedders-openai = {workspace = true}
+
+# Modules
+datapizza-ai-parsers-azure = {workspace = true}
+#datapizza-ai-parsers-docling = {workspace = true}
+datapizza-ai-rerankers-cohere = {workspace = true}
+datapizza-ai-rerankers-together = {workspace = true}
+
+# Vectorstores
+datapizza-ai-vectorstores-qdrant = {workspace = true}
+
+# Cache
+datapizza-ai-cache-redis = {workspace = true}
+
+# Tools
+datapizza-ai-tools-duckduckgo = {workspace = true}
+
+# UV index configuration
+[[tool.uv.index]]
+name = "datapizza-pypi"
+url = "https://repository.datapizza.tech/repository/datapizza-pypi/simple"
+publish-url = "https://repository.datapizza.tech/repository/datapizza-pypi/"
+explicit = true
+
+# Hatch build configuration
+[tool.hatch.build.targets.sdist]
+include = ["datapizza"]
+exclude = ["**/BUILD"]
+
+[tool.hatch.build.targets.wheel]
+include = ["datapizza"]
+exclude = ["**/BUILD"]
+
+# Ruff configuration
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    # "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "B",   # flake8-bugbear
+    "I",   # isort
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "RUF", # Ruff-specific rules
+    "C4",  # flake8-comprehensions
+]
+
