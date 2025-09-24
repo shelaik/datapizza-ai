@@ -154,14 +154,19 @@ class Agent:
         for a in agent:
             self._tools.append(a.as_tool())
 
+
     @classmethod
     def _tool_from_agent(cls, agent: "Agent"):
+        def invoke_agent(input_task: str):
+            return agent.run(input_task).text
+
         a_tool = Tool(
-            func=agent.a_run,
+            func=invoke_agent,
             name=agent.name,
             description=agent.__doc__,
         )
         return a_tool
+
 
     @staticmethod
     def _lock_if_not_stateless(func: Callable):

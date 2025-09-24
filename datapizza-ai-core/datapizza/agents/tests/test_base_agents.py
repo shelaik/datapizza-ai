@@ -55,7 +55,6 @@ class TestBaseAgents:
         )
         agent1.can_call(agent2)
         assert agent1._tools[0].name == agent2.as_tool().name
-        assert agent1._tools[0].func == agent2.as_tool().func
         assert agent1._tools[0].description == agent2.as_tool().description
 
         agent_aggregator = Agent(
