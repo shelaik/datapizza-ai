@@ -1,8 +1,6 @@
 nav:
     - Clients
-    - Agents
-    - Tool
+    - agent.md
     - RAG
     - Pipeline
     - Monitoring
-    - Other_Concepts

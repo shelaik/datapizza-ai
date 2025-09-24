@@ -1,5 +1,7 @@
 nav:
-    - clients.md
-    - client_response.md
-    - client_factory.md
-    - cache.md
+    - quick_start.md
+    - multimodality.md
+    - structured_responses.md
+    - streaming.md
+    - tools.md
+    - chatbot.md

@@ -1,69 +1,43 @@
-`datapizza-ai` is the first Datapizza framework for AI Development. This project aims to provide a robust and flexible framework that can be used to develop and deploy AI models efficiently.
+# datapizza-ai
 
-## Features
+🍕 **Build reliable multi-agent AI apps fast** 🍕
 
-- Integration with various AI providers (OpenAI, Google VertexAI)
-- Support for embeddings and vector search
-- RAG (Retrieval-Augmented Generation) functionality
-- Document parsing and splitting
-- Advanced logging
-- Agents and agentic workflows
+`datapizza-ai` provides clear interfaces and predictable behavior for agents and RAG. End-to-end visibility and reliable orchestration keep engineers in control from PoC to scale
 
 ## Installation
 
-When using `datapizza-ai` in a private repo, you need to do few extra steps to install it since it's not regularly available on PyPi like other python packages. We are going to show the installation process depending on what you are using as dependency manager on your project.
-
-The required username an passwords can be found in Bitwarden under `pypi-registry`.
-
-### Conda environment with pip
-If you are using conda, locate the .venv folder of your environment and add a `pip.conf` file with the following content:
-```toml
-[install]
-extra-index-url = https://<username>:<password>@repository.datapizza.tech/repository/datapizza-pypi/simple
-```
-This previous step has to be done only once per environment. Then, you can install it like any other python package:
+Install the library using pip:
 
 ```bash
 pip install datapizza-ai
 ```
 
-### Poetry
-If you are using poetry as dependency manager, execute the following commands:
+## Key Features
 
-```bash
-poetry config repositories.datapizza-pypi https://repository.datapizza.tech/repository/datapizza-pypi/
-poetry config http-basic.datapizza-pypi <username> <password>
-```
+- **Integration with AI Providers**: Seamlessly connect with AI services like OpenAI and Google VertexAI.
+- **Complex workflows, minimal code.**: Design, automate, and scale powerful agent workflows without the overhead of boilerplate.
+- **Retrieval-Augmented Generation (RAG)**: Enhance AI responses with document retrieval.
+- **Faster delivery, easier onboarding for new engineers**: Rebuild a RAG + tools agent without multi-class plumbing; parity with simpler, typed interfaces.
+- **Up to 40% less debugging time**: Trace and log every LLM/tool call with inputs/outputs
 
-This step has to be done only once per project. Then, you can install it like any other package in poetry:
+## Quick Start
 
-```bash
-poetry add datapizza-ai
-```
+To get started with `datapizza-ai`, ensure you have Python `>=3.10.0,<3.13.0` installed.
 
-### UV
-
-Add to pyproject.toml in your project folder:
+Here's a basic example demonstrating how to use agents in `datapizza-ai`:
 
 ```python
-[[tool.uv.index]]
-name = "datapizza-pypi"
-url = "https://repository.datapizza.tech/repository/datapizza-pypi/simple"
+from datapizza.agents import Agent
+from datapizza.clients import OpenAIClient
+
+client = OpenAIClient(api_key="YOUR_API_KEY")
+
+agent = Agent(
+    name="datapizza_agent",
+    client=client,
+)
+
+result = agent.run("What is the best TECH company to work for in Italy?")
+print(result)
 ```
 
-MacOS/Linux: Create .netrc file in home directory:
-
-```sh
-machine repository.datapizza.tech
-login <username>
-password <password>
-```
-
-Windows: Create _netrc file in home directory (C:/Users/\<username\>/_netrc)
-
-Alternative: Export environment variables:
-
-```bash
-export UV_INDEX_INTERNAL_PROXY_USERNAME=<username>
-export UV_INDEX_INTERNAL_PROXY_PASSWORD=<password>
-```
