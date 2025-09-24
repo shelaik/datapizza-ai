@@ -466,7 +466,21 @@ class SparseEmbedding(Embedding):
 
 @dataclass
 class Chunk:
-    id: str
-    text: str
-    embeddings: list[Embedding] = field(default_factory=list)
-    metadata: dict = field(default_factory=dict)
+    """
+    A class for storing the chunk response from a client.
+    """
+
+    def __init__(self, id: str, text: str, embeddings: list[Embedding] | None = None, metadata: dict | None = None):
+        """
+        Initialize a Chunk object.
+
+        Args:
+            id (str): The id of the chunk.
+            text (str): The text of the chunk.
+            embeddings (list[Embedding], optional): The embeddings of the chunk. Defaults to [].
+            metadata (dict, optional): The metadata of the chunk. Defaults to {}.
+        """
+        self.id = id
+        self.text = text
+        self.embeddings = embeddings or []
+        self.metadata = metadata or {}

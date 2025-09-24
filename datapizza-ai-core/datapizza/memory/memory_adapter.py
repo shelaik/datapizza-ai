@@ -4,6 +4,7 @@ from datapizza.memory import Memory, Turn
 from datapizza.type import (
     ROLE,
     Block,
+    FunctionCallBlock,
 )
 
 
@@ -28,7 +29,11 @@ class MemoryAdapter(ABC):
 
         if memory:
             for turn in memory:
-                messages.append(self._turn_to_message(turn))
+                if all(isinstance(block, FunctionCallBlock) for block in turn):
+                    for block in turn:
+                        messages.append(self._turn_to_message( Turn([block], role=turn.role) ))
+                else:
+                    messages.append(self._turn_to_message(turn))
 
         if input:
             if isinstance(input, str):

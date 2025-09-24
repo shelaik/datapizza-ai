@@ -22,4 +22,5 @@ dependency-check:
 
 run_docs:
 	uv pip install mkdocs-material  pymdown-extensions mkdocs-awesome-pages-plugin mkdocstrings-python
-	uv run mkdocs serve
+	uv run mkdocs serve --livereload
+
