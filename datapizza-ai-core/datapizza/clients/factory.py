@@ -64,7 +64,7 @@ class ClientFactory:
 
             case Provider.GOOGLE:
                 try:
-                    from datapizza.clients.google_client import GoogleClient
+                    from datapizza.clients.google import GoogleClient
                 except ImportError as e:
                     raise ImportError(
                         "Google client is not installed. Please install it with `pip install datapizza-ai-clients-google`"
@@ -80,7 +80,7 @@ class ClientFactory:
 
             case Provider.ANTHROPIC:
                 try:
-                    from datapizza.clients.anthropic_client import AnthropicClient
+                    from datapizza.clients.anthropic import AnthropicClient
                 except ImportError as e:
                     raise ImportError(
                         "Anthropic client is not installed. Please install it with `pip install datapizza-ai-clients-anthropic`"
@@ -96,7 +96,7 @@ class ClientFactory:
 
             case Provider.MISTRAL:
                 try:
-                    from datapizza.clients.mistral_client import MistralClient
+                    from datapizza.clients.mistral import MistralClient
                 except ImportError as e:
                     raise ImportError(
                         "Mistral client is not installed. Please install it with `pip install datapizza-ai-clients-mistral`"
