@@ -37,7 +37,7 @@ class AgentLogger:
             )
 
     def _isEnabledFor(self, level: int) -> bool:
-        env_level = os.getenv("DATAPIZZAI_AGENT_LOG_LEVEL", "DEBUG")
+        env_level = os.getenv("DATAPIZZA_AGENT_LOG_LEVEL", "DEBUG")
         numeric_level = getattr(logging, env_level.upper(), logging.INFO)
         return level >= numeric_level
 

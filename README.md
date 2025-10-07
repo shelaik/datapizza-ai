@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PyPI version](https://img.shields.io/pypi/v/datapizza-ai.svg)](https://pypi.org/project/datapizza-ai/)
 
-🍕 **Build reliable multi-agent AI apps fast** 🍕
+🍕 **Build reliable Gen AI solutions without overhead**
 
 `datapizza-ai` provides clear interfaces and predictable behavior for agents and RAG. End-to-end visibility and reliable orchestration keep engineers in control from PoC to scale
 

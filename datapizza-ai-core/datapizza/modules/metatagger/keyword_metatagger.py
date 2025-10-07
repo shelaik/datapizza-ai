@@ -73,13 +73,13 @@ class KeywordMetatagger(Metatagger):
     def __call__(self, chunks: list[Chunk]) -> list[Chunk]:
         return self._process(chunks)
 
-    def tag(self, chunk: Chunk):
+    def tag(self, chunks: list[Chunk]):
         """
         Add metadata to a chunk.
         """
-        return self._process(chunk)
+        return self._process(chunks)
 
-    async def a_tag(self, chunk: Chunk) -> Chunk:
+    async def a_tag(self, chunks: list[Chunk]) -> list[Chunk]:
         """
         async Add metadata to a chunk.
         """

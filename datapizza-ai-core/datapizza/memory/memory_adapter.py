@@ -31,7 +31,9 @@ class MemoryAdapter(ABC):
             for turn in memory:
                 if all(isinstance(block, FunctionCallBlock) for block in turn):
                     for block in turn:
-                        messages.append(self._turn_to_message( Turn([block], role=turn.role) ))
+                        messages.append(
+                            self._turn_to_message(Turn([block], role=turn.role))
+                        )
                 else:
                     messages.append(self._turn_to_message(turn))
 

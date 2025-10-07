@@ -3,7 +3,6 @@ from collections.abc import AsyncIterator, Iterator
 from typing import Literal
 
 import httpx
-
 from datapizza.core.cache import Cache
 from datapizza.core.clients import Client, ClientResponse
 from datapizza.memory import Memory
@@ -16,6 +15,7 @@ from datapizza.type import (
     TextBlock,
     ThoughtBlock,
 )
+
 from openai import (
     AsyncOpenAI,
     AzureOpenAI,
@@ -96,9 +96,9 @@ class OpenAIClient(Client):
                 if isinstance(content_item, ResponseOutputMessage) and not isinstance(
                     content_item, ParsedResponseOutputMessage
                 ):
-                    for content_item in content_item.content:
-                        if content_item.type == "output_text":
-                            blocks.append(TextBlock(content=content_item.text))
+                    for content in content_item.content:
+                        if content.type == "output_text":
+                            blocks.append(TextBlock(content=content.text))
                 elif isinstance(content_item, ResponseReasoningItem):
                     if content_item.summary:
                         blocks.append(
@@ -111,7 +111,7 @@ class OpenAIClient(Client):
 
                     tool = tool_map.get(content_item.name)
                     if not tool:
-                        raise ValueError(f"Tool {content_item.function.name} not found")
+                        raise ValueError(f"Tool {content_item.name} not found")
                     blocks.append(
                         FunctionCallBlock(
                             id=content_item.call_id,

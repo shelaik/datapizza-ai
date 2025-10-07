@@ -1,7 +1,6 @@
-from openai import AsyncAzureOpenAI, AzureOpenAI
-
-from datapizza.core.cache import Cache
 from datapizza.clients.openai.openai_client import OpenAIClient
+from datapizza.core.cache import Cache
+from openai import AsyncAzureOpenAI, AzureOpenAI
 
 
 class AzureOpenAIClient(OpenAIClient):

@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 [project]
 name = "datapizza-ai-parsers-docling"
 version = "0.0.1"
-description = "Doclign parser for the Datapizza AI framework"
+description = "Doclign parser for the datapizza-ai framework"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [

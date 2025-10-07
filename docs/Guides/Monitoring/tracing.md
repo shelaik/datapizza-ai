@@ -1,6 +1,6 @@
 # Tracing
 
-The DataPizza AI tracing module provides an easy-to-use interface for collecting and displaying OpenTelemetry traces with rich console output. It's designed to help developers monitor performance and understand the execution flow of their applications.
+The tracing module provides an easy-to-use interface for collecting and displaying OpenTelemetry traces with rich console output. It's designed to help developers monitor performance and understand the execution flow of their applications.
 
 ## Features
 
@@ -39,7 +39,7 @@ with ContextTracing().trace("trace_name"):
 
 If you want to log the input/output and the memory passed to client invoke you should set the env variable
 
-`DATAPIZZAI_TRACE_CLIENT_IO=TRUE`
+`DATAPIZZA_TRACE_CLIENT_IO=TRUE`
 
 default is `FALSE`
 
@@ -72,7 +72,7 @@ with ContextTracing().trace("trace_name"):
 
 ## Adding External Exporters
 
-The DataPizza AI tracing module uses in-memory storage by default, but you can easily add external exporters to send traces to other systems.
+The tracing module uses in-memory storage by default, but you can easily add external exporters to send traces to other systems.
 
 ### Create the resource
 

@@ -2,9 +2,9 @@ import json
 import os
 
 import pytest
+from datapizza.type import NodeType
 
 from datapizza.modules.parsers.azure import AzureParser
-from datapizza.type import NodeType
 
 
 @pytest.fixture

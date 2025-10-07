@@ -5,7 +5,6 @@ from typing import Any
 from datapizza.core.modules.parser import Parser
 from datapizza.type import Node, NodeType
 from datapizza.type.type import Media, MediaNode
-
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions
@@ -739,7 +738,7 @@ class DoclingParser(Parser):
 
         return document_node
 
-    def parse(self, pdf_path: str) -> Node:
+    def parse(self, pdf_path: str, metadata: dict = None) -> Node:
         json_data = self.parse_to_json(pdf_path=pdf_path)
         return self._json_to_node(json_data, pdf_path=pdf_path)
 

@@ -65,9 +65,8 @@ def _basic_config(logger: logging.Logger) -> None:
     logger.addFilter(EnvLogLevelFilter())
     logger.addFilter(SensitiveHeadersFilter())
     logger.setLevel(logging.DEBUG)
-    # Add the handler to the datapizzai logger only
     logger.addHandler(console_handler)
-    logger.propagate = True
+    logger.propagate = False
 
 
 class EnvLogLevelFilter(logging.Filter):
@@ -76,7 +75,7 @@ class EnvLogLevelFilter(logging.Filter):
     @override
     def filter(self, record: logging.LogRecord) -> bool:
         # Get current log level from environment
-        env_level = os.getenv("DATAPIZZAI_LOG_LEVEL", "INFO")
+        env_level = os.getenv("DATAPIZZA_LOG_LEVEL", "INFO")
         # Convert string level to numeric level
         numeric_level = getattr(logging, env_level.upper(), logging.INFO)
         # Check if this record should pass based on environment level

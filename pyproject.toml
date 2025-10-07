@@ -7,18 +7,18 @@ build-backend = "hatchling.build"
 [project]
 name = "datapizza-ai"
 version = "0.0.1"
-description = "The first Datapizza framework for AI Development"
+description = "Build reliable Gen AI solutions without overhead"
 readme = "README.md"
 license = {text = "MIT"}
-authors = [
-    {name = "Datapizza", email = "datapizza@datapizza.tech"}
-]
+
 requires-python = ">=3.10.0,<4"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
+
 dependencies = [
     "datapizza-ai-core>=0.0.1",
     "datapizza-ai-clients-openai>=0.0.1",
@@ -100,13 +100,6 @@ datapizza-ai-cache-redis = {workspace = true}
 
 # Tools
 datapizza-ai-tools-duckduckgo = {workspace = true}
-
-# UV index configuration
-[[tool.uv.index]]
-name = "datapizza-pypi"
-url = "https://repository.datapizza.tech/repository/datapizza-pypi/simple"
-publish-url = "https://repository.datapizza.tech/repository/datapizza-pypi/"
-explicit = true
 
 # Hatch build configuration
 [tool.hatch.build.targets.sdist]

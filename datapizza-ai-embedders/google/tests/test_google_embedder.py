@@ -1,4 +1,3 @@
-import pytest
 from datapizza.embedders.google import GoogleEmbedder
 
 

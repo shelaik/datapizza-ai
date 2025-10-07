@@ -13,7 +13,7 @@ class Cache(ABC):
     Concrete subclasses must provide implementations for the abstract methods that define how caching is handled.
 
 
-    When a cache instance is attached to a client, it will automatically store the results of the client’s method calls.
+    When a cache instance is attached to a client, it will automatically store the results of the client`s method calls.
     If the same method is invoked multiple times with identical arguments, the cache returns the stored result instead of re-executing the method.
     """
 

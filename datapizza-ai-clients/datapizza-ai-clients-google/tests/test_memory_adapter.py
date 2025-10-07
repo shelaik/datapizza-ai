@@ -1,8 +1,8 @@
 import pytest
-
-from datapizza.clients.google.memory_adapter import GoogleMemoryAdapter
 from datapizza.memory.memory import Memory
 from datapizza.type import ROLE, StructuredBlock, TextBlock
+
+from datapizza.clients.google.memory_adapter import GoogleMemoryAdapter
 
 
 def test_google_memory_to_messages_structured_block():

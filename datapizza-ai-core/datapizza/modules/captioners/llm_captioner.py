@@ -48,7 +48,9 @@ class LLMCaptioner(NodeCaptioner):
         else:
             raise ValueError(f"Unsupported node type: {media_node.node_type}")
 
-        caption = self.caption(media=media_node.media, system_prompt=system_prompt)
+        caption = self.caption_media(
+            media=media_node.media, system_prompt=system_prompt
+        )
 
         # Create a new MediaNode with the caption nodes
         new_children = [
@@ -120,7 +122,7 @@ class LLMCaptioner(NodeCaptioner):
 
         return self._replace_media_nodes(node, processed_nodes)
 
-    def caption_image(self, media: Media, system_prompt: str | None = None) -> str:
+    def caption_media(self, media: Media, system_prompt: str | None = None) -> str:
         """
         Caption an image.
         Args:
@@ -161,7 +163,7 @@ class LLMCaptioner(NodeCaptioner):
 
         return self._replace_media_nodes(node, processed_nodes)
 
-    async def a_caption_image(
+    async def a_caption_media(
         self, media: Media, system_prompt: str | None = None
     ) -> str:
         """
@@ -186,7 +188,7 @@ class LLMCaptioner(NodeCaptioner):
         else:
             raise ValueError(f"Unsupported node type: {media_node.node_type}")
 
-        caption = await self.a_caption(
+        caption = await self.a_caption_media(
             media=media_node.media, system_prompt=system_prompt
         )
 

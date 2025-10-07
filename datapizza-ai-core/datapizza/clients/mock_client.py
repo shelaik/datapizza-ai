@@ -1,12 +1,14 @@
-import asyncio
 import logging
 from typing import Literal
 
 from datapizza.core.clients.client import Client
 from datapizza.core.clients.response import ClientResponse
-from datapizza.memory.memory import Memory
+from datapizza.memory.memory import Memory, Turn
+from datapizza.memory.memory_adapter import MemoryAdapter
 from datapizza.tools.tools import Tool
 from datapizza.type import (
+    ROLE,
+    Block,
     FunctionCallBlock,
     FunctionCallResultBlock,
     Model,
@@ -15,6 +17,14 @@ from datapizza.type import (
 )
 
 log = logging.getLogger(__name__)
+
+
+class FakeMemoryAdapter(MemoryAdapter):
+    def _text_to_message(self, text: str, role: ROLE) -> dict:
+        return {"role": role.value, "content": text}
+
+    def _turn_to_message(self, turn: Turn) -> dict:
+        return {"role": turn.role.value, "blocks": turn.blocks}
 
 
 class MockClient(Client):
@@ -36,34 +46,34 @@ class MockClient(Client):
             temperature=temperature,
         )
 
-        self.memory_adapter = None
+        self.memory_adapter = FakeMemoryAdapter()
 
     def _invoke(
         self,
-        *,
-        input: str,
+        input: list[Block],
         tools: list[Tool] | None = None,
         memory: Memory | None = None,
         tool_choice: str = "auto",
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
         **kwargs,
     ):
         if tools is None:
             tools = []
 
+        input_text = ""
         if isinstance(input, list):
             for b in input:
                 if isinstance(b, TextBlock):
-                    input = b.content
+                    input_text = b.content
 
         if memory and isinstance(memory[-1].blocks[-1], FunctionCallResultBlock):
             return ClientResponse(
                 content=[TextBlock(content=memory[-1].blocks[-1].result)]
             )
 
-        if not input:
+        if not input_text:
             return ClientResponse(
                 content=[
                     TextBlock(
@@ -74,7 +84,7 @@ class MockClient(Client):
                 ]
             )
 
-        if "function" in input and tools:
+        if "function" in input_text and tools:
             arguments = {
                 "text": "This is a test",
             }
@@ -89,7 +99,7 @@ class MockClient(Client):
                 ]
             )
 
-        if "exception" in input:
+        if "exception" in input_text:
             raise Exception("This is a test exception")
 
         if memory:
@@ -97,30 +107,30 @@ class MockClient(Client):
             for b in memory.iter_blocks():
                 text += b.content
 
-            text += input
+            text += input_text
 
             return ClientResponse(
                 content=[TextBlock(content=text)],
-                prompt_tokens_used=len(input),
+                prompt_tokens_used=len(input_text),
                 completion_tokens_used=len(text),
                 cached_tokens_used=0,
             )
 
         return ClientResponse(
-            content=[TextBlock(content=input)],
-            prompt_tokens_used=len(input),
-            completion_tokens_used=len(input),
+            content=[TextBlock(content=input_text)],
+            prompt_tokens_used=len(input_text),
+            completion_tokens_used=len(input_text),
             cached_tokens_used=0,
         )
 
     async def _a_invoke(
         self,
-        input: str,
+        input: list[Block],
         tools: list[Tool] | None = None,
         memory: Memory | None = None,
         tool_choice: str = "auto",
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
         **kwargs,
     ):
@@ -139,82 +149,83 @@ class MockClient(Client):
 
     def _structured_response(
         self,
-        input: list[TextBlock],
+        input: list[Block],
         output_cls: type[Model],
         memory: Memory | None = None,
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
-        tools: list[str] | None = None,
+        tools: list[Tool] | None = None,
         tool_choice: Literal["auto", "required", "none"] | list[str] = "auto",
         **kwargs,
     ):
-        # return output_cls.model_validate_json(input)
-
-        return ClientResponse(
-            content=[
-                StructuredBlock(
-                    content=output_cls.model_validate_json(input[0].content)
-                )
-            ]
-        )
+        if isinstance(input[0], TextBlock):
+            return ClientResponse(
+                content=[
+                    StructuredBlock(
+                        content=output_cls.model_validate_json(input[0].content)
+                    )
+                ]
+            )
+        else:
+            raise ValueError("input must be a list of TextBlock")
 
     def _stream_invoke(
         self,
-        input: list[TextBlock],
-        tools: list[str] | None = None,
+        input: list[Block],
+        tools: list[Tool] | None = None,
         memory: Memory | None = None,
         tool_choice: str = "auto",
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
         **kwargs,
     ):
         if tools is None:
             tools = []
         given_response = ""
+
+        if not isinstance(input[0], TextBlock):
+            raise ValueError("input must be a list of TextBlock")
+
         for char in input[0].content:
             given_response += char
             yield ClientResponse(
                 content=[TextBlock(content=given_response)], delta=char
             )
 
-    async def _a_stream_invoke(
+    async def _a_stream_invoke(  # type: ignore
         self,
-        input: list[TextBlock],
-        tools: list[str] | None = None,
+        input: list[Block],
+        tools: list[Tool] | None = None,
         memory: Memory | None = None,
         tool_choice: str = "auto",
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
         **kwargs,
     ):
         if tools is None:
             tools = []
         given_response = ""
-        for char in input[0].content:
-            await asyncio.sleep(0.01)  # Reduced sleep time for faster testing
+        for char in input[0].content:  # type: ignore
             given_response += char
             yield ClientResponse(
                 content=[TextBlock(content=given_response)], delta=char
             )
-
-    def _embed(self, text: str, model_name: str | None = None) -> list[float]:
-        return [0.0] * 1536
 
     def _convert_tool_choice(self, tool_choice: str | list[str]) -> dict:
         return {}
 
-    def _a_structured_response(
+    def _a_structured_response(  # type: ignore
         self,
-        input: list[TextBlock],
+        input: list[Block],
         output_cls: type[Model],
         memory: Memory | None = None,
-        temperature: float = 0.6,
-        max_tokens: int = 1000,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         system_prompt: str | None = None,
-        tools: list[str] | None = None,
+        tools: list[Tool] | None = None,
         tool_choice: Literal["auto", "required", "none"] | list[str] = "auto",
         **kwargs,
     ):

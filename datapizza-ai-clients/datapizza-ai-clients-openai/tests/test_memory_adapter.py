@@ -1,9 +1,6 @@
 import json
 
 import pytest
-from openai.types.responses import ResponseFunctionToolCall
-
-from datapizza.clients.openai.memory_adapter import OpenAIMemoryAdapter
 from datapizza.memory.memory import Memory
 from datapizza.tools.tools import tool
 from datapizza.type.type import (
@@ -14,6 +11,9 @@ from datapizza.type.type import (
     StructuredBlock,
     TextBlock,
 )
+from openai.types.responses import ResponseFunctionToolCall
+
+from datapizza.clients.openai.memory_adapter import OpenAIMemoryAdapter
 
 
 @pytest.fixture(

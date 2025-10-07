@@ -11,6 +11,7 @@ from datapizza.type import (
     StructuredBlock,
     TextBlock,
 )
+
 from openai.types.responses import ResponseFunctionToolCall
 
 

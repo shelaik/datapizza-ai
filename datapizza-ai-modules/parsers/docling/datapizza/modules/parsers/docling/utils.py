@@ -52,7 +52,7 @@ def extract_media_from_docling_bbox(
     with fitz.open(file_path) as doc:
         page = doc[page_number - 1]
         mat = fitz.Matrix(zoom, zoom)
-        pix = page.get_pixmap(matrix=mat)
+        pix = page.get_pixmap(matrix=mat)  # type: ignore
 
         img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)  # type: ignore
         x_scale = pix.width / page.rect.width
@@ -69,10 +69,10 @@ def extract_media_from_docling_bbox(
             top = t * y_scale
             bottom = b * y_scale
 
-        left_i = max(0, min(int(round(left)), img.width))
-        right_i = max(0, min(int(round(right)), img.width))
-        top_i = max(0, min(int(round(top)), img.height))
-        bottom_i = max(0, min(int(round(bottom)), img.height))
+        left_i = max(0, min(round(left), img.width))
+        right_i = max(0, min(round(right), img.width))
+        top_i = max(0, min(round(top), img.height))
+        bottom_i = max(0, min(round(bottom), img.height))
 
         # Ensure proper ordering after rounding/clamping
         left_i, right_i = (left_i, right_i) if left_i <= right_i else (right_i, left_i)

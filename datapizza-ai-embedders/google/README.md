@@ -1,6 +1,6 @@
-# DataPizza AI Google Embedder
+# Google Embedder
 
-Google Generative AI embedder implementation for DataPizza AI.
+Google Generative AI embedder implementation for datapizza-ai
 
 ## Installation
 

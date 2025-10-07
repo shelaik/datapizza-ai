@@ -7,12 +7,10 @@ build-backend = "hatchling.build"
 [project]
 name = "datapizza-ai-embedders-openai"
 version = "0.0.1"
-description = "OpenAI embedder for the Datapizza AI framework"
+description = "OpenAI embedder for the datapizza-ai framework"
 readme = "README.md"
 license = {text = "MIT"}
-authors = [
-    {name = "Datapizza", email = "datapizza@datapizza.tech"}
-]
+
 requires-python = ">=3.10.0,<3.13.0"
 classifiers = [
     "Programming Language :: Python :: 3",

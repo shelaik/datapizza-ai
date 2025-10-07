@@ -1,7 +1,6 @@
 from collections.abc import AsyncIterator, Iterator
 from typing import Any, Literal
 
-from datapizza.clients.anthropic.memory_adapter import AnthropicMemoryAdapter
 from datapizza.core.cache import Cache
 from datapizza.core.clients import Client, ClientResponse
 from datapizza.memory import Memory
@@ -9,6 +8,8 @@ from datapizza.tools import Tool
 from datapizza.type import FunctionCallBlock, TextBlock, ThoughtBlock
 
 from anthropic import Anthropic, AsyncAnthropic
+
+from .memory_adapter import AnthropicMemoryAdapter
 
 
 class AnthropicClient(Client):

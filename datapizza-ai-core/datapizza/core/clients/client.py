@@ -143,7 +143,7 @@ class Client(ChainableProducer):
             )
             span.set_attribute("cached_tokens_used", response.cached_tokens_used)
             span.set_attribute("model_name", self.model_name)
-            if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+            if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                 span.set_attribute(
                     "input", json.dumps([b.to_dict() for b in input]) if input else ""
                 )
@@ -192,7 +192,7 @@ class Client(ChainableProducer):
                 tools = []
             log.debug(f"Invoking model {self.__class__.__name__} with input: {input}")
 
-            if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+            if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                 span.set_attribute(
                     "input", json.dumps([b.to_dict() for b in input]) if input else ""
                 )
@@ -207,7 +207,7 @@ class Client(ChainableProducer):
                 system_prompt=system_prompt or self.system_prompt,
                 **kwargs,
             )
-            if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+            if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                 span.set_attribute("output", response.text)
                 span.set_attribute("memory", memory.json_dumps() if memory else "None")
             span.set_attribute("prompt_tokens_used", response.prompt_tokens_used)
@@ -291,7 +291,7 @@ class Client(ChainableProducer):
                 )
                 span.set_attribute("model_name", self.model_name)
                 span.set_attribute("stop_reason", last_response.stop_reason or "None")
-                if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+                if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                     span.set_attribute(
                         "input",
                         json.dumps([b.to_dict() for b in input]) if input else "",
@@ -342,7 +342,7 @@ class Client(ChainableProducer):
 
             if (
                 input
-                and os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true"
+                and os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true"
             ):
                 span.set_attribute(
                     "input",
@@ -380,7 +380,7 @@ class Client(ChainableProducer):
                 span.set_attribute("model_name", self.model_name)
                 span.set_attribute("stop_reason", last_response.stop_reason or "None")
 
-                if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+                if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                     span.set_attribute("output", last_response.text)
                     span.set_attribute(
                         "memory", memory.json_dumps() if memory else "None"
@@ -453,7 +453,7 @@ class Client(ChainableProducer):
             span.set_attribute("cached_tokens_used", response.cached_tokens_used)
             span.set_attribute("model_name", self.model_name)
             span.set_attribute("stop_reason", response.stop_reason or "None")
-            if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+            if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                 span.set_attribute(
                     "input", json.dumps([b.to_dict() for b in input]) if input else ""
                 )
@@ -529,7 +529,7 @@ class Client(ChainableProducer):
             span.set_attribute("cached_tokens_used", response.cached_tokens_used)
             span.set_attribute("model_name", self.model_name)
             span.set_attribute("stop_reason", response.stop_reason or "None")
-            if os.getenv("DATAPIZZAI_TRACE_CLIENT_IO", "false").lower() == "true":
+            if os.getenv("DATAPIZZA_TRACE_CLIENT_IO", "false").lower() == "true":
                 span.set_attribute(
                     "input", json.dumps([b.to_dict() for b in input]) if input else ""
                 )

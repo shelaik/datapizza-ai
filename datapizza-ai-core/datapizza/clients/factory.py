@@ -48,7 +48,7 @@ class ClientFactory:
         match provider:
             case Provider.OPENAI:
                 try:
-                    from datapizza.clients.openai import OpenAIClient
+                    from datapizza.clients.openai import OpenAIClient  # type: ignore
                 except ImportError as e:
                     raise ImportError(
                         "OpenAI client is not installed. Please install it with `pip install datapizza-ai-clients-openai`"
@@ -64,7 +64,7 @@ class ClientFactory:
 
             case Provider.GOOGLE:
                 try:
-                    from datapizza.clients.google import GoogleClient
+                    from datapizza.clients.google import GoogleClient  # type: ignore
                 except ImportError as e:
                     raise ImportError(
                         "Google client is not installed. Please install it with `pip install datapizza-ai-clients-google`"
@@ -80,7 +80,9 @@ class ClientFactory:
 
             case Provider.ANTHROPIC:
                 try:
-                    from datapizza.clients.anthropic import AnthropicClient
+                    from datapizza.clients.anthropic import (  # type: ignore
+                        AnthropicClient,
+                    )
                 except ImportError as e:
                     raise ImportError(
                         "Anthropic client is not installed. Please install it with `pip install datapizza-ai-clients-anthropic`"
@@ -96,7 +98,7 @@ class ClientFactory:
 
             case Provider.MISTRAL:
                 try:
-                    from datapizza.clients.mistral import MistralClient
+                    from datapizza.clients.mistral import MistralClient  # type: ignore
                 except ImportError as e:
                     raise ImportError(
                         "Mistral client is not installed. Please install it with `pip install datapizza-ai-clients-mistral`"
@@ -112,7 +114,9 @@ class ClientFactory:
 
             case Provider.AZURE_OPENAI:
                 try:
-                    from datapizza.clients.azure_openai_client import AzureOpenAIClient
+                    from datapizza.clients.azure_openai_client import (  # type: ignore
+                        AzureOpenAIClient,
+                    )
                 except ImportError as e:
                     raise ImportError(
                         "Azure OpenAI client is not installed. Please install it with `pip install datapizza-ai-clients-azure-openai`"

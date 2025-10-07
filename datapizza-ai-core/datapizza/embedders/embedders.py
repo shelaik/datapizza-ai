@@ -1,6 +1,5 @@
 import logging
 from collections.abc import Generator
-from typing import override
 
 from datapizza.core.clients import Client
 from datapizza.core.embedder import BaseEmbedder
@@ -24,9 +23,9 @@ class ClientEmbedder(BaseEmbedder):
         self.embedding_name = embedding_name or model_name or self.client.model_name
 
     def embed(self, text: str | list[str], **kwargs) -> list[float]:
-        return self.client.embed(text, self.model_name, **kwargs)
+        return self.client.embed(text, self.model_name, **kwargs)  # type: ignore
 
-    async def a_embed(self, text: str, **kwargs) -> list[float]:
+    async def a_embed(self, text: str | list[str], **kwargs) -> list[float]:
         return await self.client.a_embed(text, self.model_name, **kwargs)  # type: ignore
 
 
@@ -111,5 +110,5 @@ class ChunkEmbedder(PipelineComponent):
     def _run(self, nodes: list[Chunk]) -> list[Chunk]:
         return self.embed(nodes)
 
-    async def _arun(self, nodes: list[Chunk]) -> list[Chunk]:
+    async def _a_run(self, nodes: list[Chunk]) -> list[Chunk]:
         return await self.a_embed(nodes)

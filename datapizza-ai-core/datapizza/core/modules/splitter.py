@@ -10,8 +10,9 @@ class Splitter(PipelineComponent):
         return self.split(node)
 
     async def _a_run(self, node: Node) -> list[Chunk]:
-        return self.a_split(node)
+        return await self.a_split(node)
 
+    @abstractmethod
     @overload
     def split(self, text: str) -> list[Chunk]:
         pass
@@ -21,7 +22,7 @@ class Splitter(PipelineComponent):
     def split(self, node: Node) -> list[Chunk]:
         pass
 
-    async def a_split(self, text: str) -> list[Chunk]:
+    async def a_split(self, text: str | Node) -> list[Chunk]:
         raise NotImplementedError(
             f"a_split is not implemented in {self.__class__.__name__} "
         )

@@ -1,4 +1,3 @@
-import pytest
 
 from datapizza.embedders.openai import OpenAIEmbedder
 

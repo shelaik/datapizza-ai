@@ -17,7 +17,7 @@ class Reranker(PipelineComponent):
         raise NotImplementedError
 
     def _run(self, query: str, documents: list[Chunk]) -> list[Chunk]:
-        return self.rerank(documents, query)
+        return self.rerank(query=query, documents=documents)
 
     async def _a_run(self, query: str, documents: list[Chunk]) -> list[Chunk]:
-        return await self.a_rerank(documents, query)
+        return await self.a_rerank(query=query, documents=documents)

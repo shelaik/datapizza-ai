@@ -96,7 +96,7 @@ pipeline.run(file_path="path_to_your_file.pdf")
 
 text_embedder = ClientEmbedder(client=client, model_name="text-embedding-3-small", embedding_name="small")
 query = "Who won the world cup in 2006?"
-results = vector_store.search(query_vector=text_embedder.embed(query), collection_name="datapizzai", k=4)
+results = vector_store.search(query_vector=text_embedder.embed(query), collection_name="datapizza", k=4)
 print(results)
 
 ```

@@ -1,12 +1,10 @@
 import inspect
 from collections.abc import AsyncGenerator, Callable, Generator
-from dataclasses import dataclass
 from functools import wraps
 from threading import Lock
-from typing import Any, Literal, Union
+from typing import Any, Literal, Union, cast
 
 from pydantic import BaseModel
-from typing_extensions import deprecated
 
 from datapizza.agents.logger import AgentLogger
 from datapizza.core.clients import Client
@@ -154,11 +152,10 @@ class Agent:
         for a in agent:
             self._tools.append(a.as_tool())
 
-
     @classmethod
     def _tool_from_agent(cls, agent: "Agent"):
         def invoke_agent(input_task: str):
-            return agent.run(input_task).text
+            return cast(StepResult, agent.run(input_task)).text
 
         a_tool = Tool(
             func=invoke_agent,
@@ -166,7 +163,6 @@ class Agent:
             description=agent.__doc__,
         )
         return a_tool
-
 
     @staticmethod
     def _lock_if_not_stateless(func: Callable):
@@ -595,7 +591,10 @@ class Agent:
             The final result of the agent's execution
         """
         with agent_span(f"Agent {self.name}"):
-            return list(self._invoke_stream(task_input, tool_choice, **gen_kwargs))[-1]
+            return cast(
+                StepResult,
+                list(self._invoke_stream(task_input, tool_choice, **gen_kwargs))[-1],
+            )
 
     @_lock_if_not_stateless
     async def a_run(

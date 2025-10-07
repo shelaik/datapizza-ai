@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 [project]
 name = "datapizza-ai-embedders-cohere"
 version = "0.0.1"
-description = "Cohere embedder for the Datapizza AI framework"
+description = "Cohere embedder for the datapizza-ai framework"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [

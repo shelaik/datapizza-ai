@@ -1,9 +1,9 @@
 import uuid
 
 import pytest
-
 from datapizza.core.vectorstore import VectorConfig
 from datapizza.type.type import Chunk, DenseEmbedding
+
 from datapizza.vectorstores.qdrant import QdrantVectorstore
 
 

@@ -30,7 +30,7 @@ class GoogleEmbedder(BaseEmbedder):
         if not model:
             raise ValueError("Model name is required.")
 
-        texts = [text] if isinstance(text, str) else text
+        [text] if isinstance(text, str) else text
 
         client = self._get_client()
 
@@ -45,7 +45,7 @@ class GoogleEmbedder(BaseEmbedder):
         if not model:
             raise ValueError("Model name is required.")
 
-        texts = [text] if isinstance(text, str) else text
+        [text] if isinstance(text, str) else text
 
         client = self._get_a_client()
 

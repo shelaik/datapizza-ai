@@ -2,7 +2,7 @@ import hashlib
 import logging
 import uuid
 from abc import abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Literal, TypeVar
 
@@ -470,7 +470,13 @@ class Chunk:
     A class for storing the chunk response from a client.
     """
 
-    def __init__(self, id: str, text: str, embeddings: list[Embedding] | None = None, metadata: dict | None = None):
+    def __init__(
+        self,
+        id: str,
+        text: str,
+        embeddings: list[Embedding] | None = None,
+        metadata: dict | None = None,
+    ):
         """
         Initialize a Chunk object.
 

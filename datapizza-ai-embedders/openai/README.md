@@ -1,6 +1,6 @@
-# DataPizza AI OpenAI Embedder
+# OpenAI Embedder
 
-OpenAI embedder implementation for DataPizza AI.
+OpenAI embedder implementation.
 
 ## Installation
 

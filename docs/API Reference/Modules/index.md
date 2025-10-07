@@ -1,6 +1,6 @@
 # Modules
 
-This section contains API reference documentation for all DataPizza AI modules. Modules are organized by functionality and include both core modules (included by default) and optional modules that require separate installation.
+This section contains API reference documentation for all datapizza-ai modules. Modules are organized by functionality and include both core modules (included by default) and optional modules that require separate installation.
 
 ## Core Modules (Included by Default)
 

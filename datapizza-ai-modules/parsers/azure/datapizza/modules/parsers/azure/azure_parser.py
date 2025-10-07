@@ -2,6 +2,9 @@ import json
 from typing import Any
 
 import aiofiles
+from datapizza.core.modules.parser import Parser
+from datapizza.core.utils import extract_media
+from datapizza.type import Media, MediaNode, Node, NodeType
 
 from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.ai.documentintelligence.aio import (
@@ -9,9 +12,6 @@ from azure.ai.documentintelligence.aio import (
 )
 from azure.ai.documentintelligence.models import AnalyzeDocumentRequest, AnalyzeResult
 from azure.core.credentials import AzureKeyCredential
-from datapizza.core.modules.parser import Parser
-from datapizza.core.utils import extract_media
-from datapizza.type import Media, MediaNode, Node, NodeType
 
 
 class AzureParser(Parser):

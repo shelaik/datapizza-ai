@@ -4,6 +4,9 @@ from datapizza.core.models import PipelineComponent
 
 
 class BaseEmbedder(PipelineComponent):
+    client: object
+    a_client: object
+
     def _get_client(self):
         if not self.client:
             self._set_client()
@@ -30,8 +33,8 @@ class BaseEmbedder(PipelineComponent):
         return await self.a_embed(text)
 
     @abstractmethod
-    def embed(self, text: str):
-        return self.model.embed(text)
+    def embed(self, text: str | list[str], **kwargs) -> list[float]:
+        pass
 
-    async def a_embed(self, text: str):
-        return self.embed(text)
+    async def a_embed(self, text: str | list[str], **kwargs):
+        raise NotImplementedError

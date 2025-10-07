@@ -1,6 +1,6 @@
-# Building a RAG System with DataPizza AI
+# Building a RAG System with datapizza-ai
 
-This guide demonstrates how to build a complete RAG (Retrieval-Augmented Generation) system using DataPizza AI's pipeline architecture. We'll cover both the **ingestion pipeline** for processing and storing documents, and the **DagPipeline** for retrieval and response generation.
+This guide demonstrates how to build a complete RAG (Retrieval-Augmented Generation) system using datapizza-ai's pipeline architecture. We'll cover both the **ingestion pipeline** for processing and storing documents, and the **DagPipeline** for retrieval and response generation.
 
 ## Overview
 
@@ -9,7 +9,7 @@ A RAG system consists of two main phases:
 1. **Ingestion**: Process documents, split them into chunks, generate embeddings, and store in a vector database
 2. **Retrieval**: Query the vector database, retrieve relevant chunks, and generate responses
 
-DataPizza AI provides specialized pipeline components for each phase:
+datapizza-ai provides specialized pipeline components for each phase:
 
 - **IngestionPipeline**: Sequential processing for document ingestion
 - **DagPipeline**: Graph-based processing for complex retrieval workflows
@@ -21,43 +21,66 @@ The ingestion pipeline processes raw documents and stores them in a vector datab
 ### Basic Ingestion Setup
 
 ```python
-from datapizza.pipeline import IngestionPipeline
-from datapizza.modules.parsers import TextParser
-from datapizza.modules.splitters import TextSplitter
-from datapizza.embedders import ClientEmbedder
-from datapizza.clients import ClientFactory
-from datapizza.vectorstores.qdrant import QdrantVectorstore
+import os
+
+from datapizza.clients.openai import OpenAIClient
 from datapizza.core.vectorstore import VectorConfig
+from datapizza.embedders import ChunkEmbedder
+from datapizza.embedders.openai import OpenAIEmbedder
+from datapizza.modules.captioners import LLMCaptioner
+from datapizza.modules.parsers.docling import DoclingParser
+from datapizza.modules.splitters import NodeSplitter
+from datapizza.pipeline import IngestionPipeline
+from datapizza.vectorstores.qdrant import QdrantVectorstore
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Initialize vector store
-vectorstore = QdrantVectorstore(host="localhost", port=6333)
+vectorstore = QdrantVectorstore(location=":memory:")
 vectorstore.create_collection(
     "my_documents",
     vector_config=[VectorConfig(name="embedding", dimensions=1536)]
 )
 
-# Create embedding client
-client_factory = ClientFactory()
-embedder_client = client_factory.create_client(
-    provider="openai",
-    model="text-embedding-3-small",
-    api_key="your-openai-api-key"
+embedder_client = OpenAIEmbedder(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    model_name="text-embedding-3-small",
 )
 
 # Build ingestion pipeline
 ingestion_pipeline = IngestionPipeline(
     modules=[
-        TextParser(),                    # Parse documents
-        TextSplitter(max_char=1000),    # Split into chunks
-        ClientEmbedder(client=embedder_client)  # Generate embeddings
+        DoclingParser(),
+
+        #LLMCaptioner(
+        #    client=OpenAIClient(
+        #        api_key=os.getenv("OPENAI_API_KEY"),
+        #        model="gpt-4o-mini",
+        #    ),
+        #    system_prompt_table="Generate concise captions for tables.",
+        #    system_prompt_figure="Generate descriptive captions for figures."
+        #), # This is optional, add it if you want to caption the media
+
+        NodeSplitter(max_char=1000),    # Split into chunks
+        ChunkEmbedder(client=embedder_client),
     ],
     vector_store=vectorstore,
     collection_name="my_documents"
 )
 
-# Ingest documents
-documents = ["path/to/doc1.txt", "path/to/doc2.txt"]
-ingestion_pipeline.run(documents, metadata={"source": "user_upload"})
+documents = ["sample.pdf"]
+for doc in documents:
+    ingestion_pipeline.run(doc, metadata={"source": "user_upload"})
+
+
+
+res = vectorstore.search(
+    query_vector = [0.0] * 1536,
+    collection_name="my_documents",
+    k=2,
+)
+print(res)
 ```
 
 ### Advanced Ingestion with Multiple Components

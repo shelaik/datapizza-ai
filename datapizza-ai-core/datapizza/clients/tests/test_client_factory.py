@@ -1,5 +1,6 @@
-from datapizza.clients import ClientFactory
 from datapizza.clients.openai import OpenAIClient
+
+from datapizza.clients import ClientFactory
 
 
 def test_client_factory_openai():

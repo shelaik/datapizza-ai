@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 [project]
 name = "datapizza-ai-rerankers-cohere"
 version = "0.0.1"
-description = "Cohere reranker for the Datapizza AI framework"
+description = "Cohere reranker for the datapizza-ai framework"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [

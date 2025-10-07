@@ -10,6 +10,7 @@ from datapizza.type import (
     StructuredBlock,
     TextBlock,
 )
+
 from google.genai import types
 
 

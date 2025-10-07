@@ -23,7 +23,7 @@ class ChainableProducer(ABC):
 
 class PipelineComponent(ABC):
     """
-    Abstract base class for components that can be used in Datapizzai pipelines.
+    Abstract base class for components that can be used in datapizza-ai pipelines.
 
     Provides a common __call__ interface for execution logging and delegates
     the core logic to the component's _run/_a_run methods.

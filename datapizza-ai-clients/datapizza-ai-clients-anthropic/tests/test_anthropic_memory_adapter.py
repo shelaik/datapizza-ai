@@ -1,7 +1,8 @@
-from datapizza.clients.anthropic import AnthropicClient
-from datapizza.clients.anthropic.memory_adapter import AnthropicMemoryAdapter
 from datapizza.memory.memory import Memory
 from datapizza.type import ROLE, TextBlock
+
+from datapizza.clients.anthropic import AnthropicClient
+from datapizza.clients.anthropic.memory_adapter import AnthropicMemoryAdapter
 
 
 def test_init_anthropic_client():

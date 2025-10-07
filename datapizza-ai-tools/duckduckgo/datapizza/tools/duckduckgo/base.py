@@ -17,7 +17,7 @@ class DuckDuckGoSearchTool(Tool):
             func=self.__call__,
         )
 
-    def _format_results(self, results: list[str]) -> list[str]:
+    def _format_results(self, results: list[str]) -> str:
         """Format the results."""
         return "## Search Results\n\n" + "\n\n".join(
             [

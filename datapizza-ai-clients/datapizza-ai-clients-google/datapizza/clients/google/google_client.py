@@ -14,10 +14,11 @@ from datapizza.type import (
     ThoughtBlock,
 )
 
-from datapizza.clients.google.memory_adapter import GoogleMemoryAdapter
 from google import genai
 from google.genai import types
 from google.oauth2 import service_account
+
+from .memory_adapter import GoogleMemoryAdapter
 
 
 class GoogleClient(Client):
@@ -406,12 +407,15 @@ class GoogleClient(Client):
                             stop_reason=stop_reason,
                             prompt_tokens_used=chunk.usage_metadata.prompt_token_count
                             if chunk.usage_metadata
+                            and chunk.usage_metadata.prompt_token_count
                             else 0,
                             completion_tokens_used=chunk.usage_metadata.candidates_token_count
                             if chunk.usage_metadata
+                            and chunk.usage_metadata.candidates_token_count
                             else 0,
                             cached_tokens_used=chunk.usage_metadata.cached_content_token_count
                             if chunk.usage_metadata
+                            and chunk.usage_metadata.cached_content_token_count
                             else 0,
                         )
 

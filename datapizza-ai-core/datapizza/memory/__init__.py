@@ -3,6 +3,6 @@ from .memory_adapter import MemoryAdapter
 
 __all__ = [
     "Memory",
-    "Turn",
     "MemoryAdapter",
+    "Turn",
 ]

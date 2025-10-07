@@ -1,8 +1,9 @@
 import logging
 import pickle
-import redis
 
 from datapizza.core.cache import Cache
+
+import redis
 
 log = logging.getLogger(__name__)
 
@@ -29,4 +30,3 @@ class RedisCache(Cache):
         """Serialize and store object"""
         pickled_obj = pickle.dumps(obj)
         self.redis.set(key, pickled_obj, ex=self.expiration_time)
-
