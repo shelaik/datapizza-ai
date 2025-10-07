@@ -17,17 +17,6 @@ def is_dict(obj: object) -> bool:
     return isinstance(obj, dict)
 
 
-def setup_base_logging(logger: logging.Logger) -> None:
-    logging.basicConfig(
-        format="[%(levelname)s - %(asctime)s - %(name)s:%(lineno)d ] %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-    logger.setLevel(logging.DEBUG)
-    logger.addFilter(EnvLogLevelFilter())
-    logger.addFilter(SensitiveHeadersFilter())
-    # logger.propagate = True
-
-
 def _basic_config(logger: logging.Logger) -> None:
     # Color codes for different log levels
     COLORS = {

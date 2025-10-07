@@ -15,8 +15,8 @@ class LLMCaptioner(NodeCaptioner):
         self,
         client: Client,
         max_workers: int = 3,
-        system_prompt_table: str | None = None,
-        system_prompt_figure: str | None = None,
+        system_prompt_table: str | None = "Generate concise captions for tables.",
+        system_prompt_figure: str | None = "Generate descriptive captions for figures.",
     ):
         """
         Captioner that uses an LLM client to caption a node.
