@@ -14,7 +14,6 @@ All splitters are included with `datapizza-ai-core` and require no additional in
 - [TextSplitter](text_splitter.md) - Basic text splitter for general-purpose chunking
 - [NodeSplitter](node_splitter.md) - Splitter for Node objects preserving hierarchical structure
 - [PDFImageSplitter](pdf_image_splitter.md) - Specialized splitter for PDF content with images
-- [BBoxMerger](bbox_merger.md) - Utility for merging bounding box regions
 
 ## Common Features
 

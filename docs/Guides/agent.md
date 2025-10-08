@@ -29,7 +29,7 @@ print(res.text)
 
 ## Use Tools
 
-The above agent is quite basic, so let's make it more functional by adding [**tools**](../Tool/tool.md).
+The above agent is quite basic, so let's make it more functional by adding [**tools**](../API%20Reference/Type/tool.md).
 
 ```python
 from datapizza.agents import Agent

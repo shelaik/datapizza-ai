@@ -11,7 +11,7 @@ description = "Build reliable Gen AI solutions without overhead"
 readme = "README.md"
 license = {text = "MIT"}
 
-requires-python = ">=3.10.0,<4"
+requires-python = ">=3.10.0,<4" 
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

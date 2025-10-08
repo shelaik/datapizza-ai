@@ -14,12 +14,12 @@ The `IngestionPipeline` provides a streamlined way to process documents, transfo
 
 The pipeline typically supports components for:
 
-1.  [**Parsers**](../RAG/Components/parsers.md): Convert raw documents (PDF, DOCX, etc.) into structured `Node` objects (e.g., `AzureParser`, `UnstructuredParser`).
-2.  [**Captioners**](../RAG/Components/captioners.md): Enhance nodes representing images or tables with textual descriptions using models like LLMs (e.g., `LLMCaptioner`).
-3.  [**Splitters**](../RAG/Components/splitters.md): Divide nodes into smaller chunks based on their content (e.g., `NodeSplitter`, `PdfImageSplitter`).
-4.  [**Embedders**](../RAG/Components/embedders.md): Convert nodes into embeddings for semantic search and similarity matching (e.g., `NodeEmbedder`, `ClientEmbedder`).
-     - [`NodeEmbedder`](../RAG/Components/embedders.md#nodeembedder): Batch processing for efficient embedding of multiple nodes.
-5.  [**Vector Stores**](../RAG/Components/vectorstores.md): Store and retrieve embeddings efficiently using vector databases (e.g., `QdrantVectorstore`).
+1.  [**Parsers**](../../API%20Reference/Modules/Parsers/index.md): Convert raw documents (PDF, DOCX, etc.) into structured `Node` objects (e.g., `AzureParser`, `UnstructuredParser`).
+2.  [**Captioners**](../../API%20Reference/Modules/captioners.md): Enhance nodes representing images or tables with textual descriptions using models like LLMs (e.g., `LLMCaptioner`).
+3.  [**Splitters**](../../API%20Reference/Modules/Splitters/index.md): Divide nodes into smaller chunks based on their content (e.g., `NodeSplitter`, `PdfImageSplitter`).
+4.  [**Embedders**](../../API%20Reference/Embedders/openai_embedder.md): Create chunk embeddings for semantic search and similarity matching (e.g., `NodeEmbedder`, `ClientEmbedder`).
+     - [`ChunkEmbedder`](../../API%20Reference/Embedders/chunk_embedder.md): Batch processing for efficient embedding of multiple nodes.
+5.  [**Vector Stores**](../../API%20Reference/Vectorstore/qdrant_vectorstore.md): Store and retrieve embeddings efficiently using vector databases (e.g., `QdrantVectorstore`).
 
 Refer to the specific documentation for each component type (e.g., in `datapizza.parsers`, `datapizza.embedders`) for details on their specific parameters and usage. Remember that pipeline components typically inherit from `PipelineComponent` and implement the `_run` method.
 

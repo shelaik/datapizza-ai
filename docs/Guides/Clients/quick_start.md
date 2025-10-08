@@ -114,7 +114,7 @@ Build responsive applications with real-time text generation and streaming.
 ### 🛠️ [Tools Guide](tools.md)
 Extend AI capabilities by integrating external functions and tools.
 
-### 📊 [Structured Responses Guide](structured.md)
+### 📊 [Structured Responses Guide](structured_responses.md)
 Work with strongly-typed outputs using JSON schemas and Pydantic models.
 
 ### 🤖 [Chatbot Guide](chatbot.md)

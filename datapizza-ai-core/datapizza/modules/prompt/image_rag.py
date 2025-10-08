@@ -17,10 +17,10 @@ class ImageRAGPrompt(Prompt):
 
     def __init__(
         self,
-        user_prompt_template,
-        image_prompt_presentation,
-        each_image_template,
-        main_folder,
+        user_prompt_template : str,
+        image_prompt_presentation : str,
+        each_image_template : str,
+        main_folder : str,
     ):
         """
         Args:

@@ -6,27 +6,18 @@ This section contains API reference documentation for all datapizza-ai modules. 
 
 These modules are included with `datapizza-ai-core` and are available without additional installation:
 
-- [Parsers](Parsers/) - Convert documents into structured Node representations
-  - [TextParser](Parsers/text_parser.md) - Simple text parser for plain text
-  - [AzureParser](Parsers/azure_parser.md) - Azure AI Document Intelligence parser (requires separate installation)
+- [Parsers](Parsers/index.md) - Convert documents into structured Node representations
 - [Captioners](captioners.md) - Generate captions and descriptions for content
 - [Metatagger](metatagger.md) - Add metadata tags to content
-- [Prompt](prompt.md) - Manage prompts and prompt templates
+- [Prompt](./Prompt/ChatPromptTemplate.md) - Manage prompts and prompt templates
 - [Rewriters](rewriters.md) - Transform and rewrite content
-- [Splitters](Splitters/) - Split content into smaller chunks
-  - [RecursiveSplitter](Splitters/recursive_splitter.md) - Recursive text splitting with multiple strategies
-  - [TextSplitter](Splitters/text_splitter.md) - Basic text splitter
-  - [NodeSplitter](Splitters/node_splitter.md) - Splitter for Node objects
-  - [PDFImageSplitter](Splitters/pdf_image_splitter.md) - Specialized PDF content splitter
-  - [BBoxMerger](Splitters/bbox_merger.md) - Bounding box merger utility
+- [Splitters](Splitters/index.md) - Split content into smaller chunks
 - [Treebuilder](treebuilder.md) - Build hierarchical tree structures from content
 
 ## Optional Modules (Separate Installation Required)
 
 These modules require separate installation via pip:
 
-- [Rerankers](Rerankers/) - Rerank and score content relevance
-  - [CohereReranker](Rerankers/cohere_reranker.md) - Cohere API reranker
-  - [TogetherReranker](Rerankers/together_reranker.md) - Together AI reranker
+- [Rerankers](./Rerankers/index.md) - Rerank and score content relevance
 
 Each module page includes installation instructions and usage examples.

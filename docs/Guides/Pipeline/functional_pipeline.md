@@ -10,7 +10,7 @@ The `FunctionalPipeline` module provides a flexible way to build data processing
 
 ### Dependency
 
-Defines how data flows between [Nodes](../Other_Concepts/node.md):
+Defines how data flows between [Nodes](../../API%20Reference/Type/node.md):
 
 ```python
 @dataclass
@@ -183,10 +183,10 @@ When using `.then()`, the `target_key` parameter specifies the input parameter n
 
 This pipeline:
 
-1. [Rewrites/processes](../RAG/Components/rewriters.md) the user query
-2. [Creates embeddings](../RAG/Components/embedders.md) from the processed query
-3. Retrieves relevant chunks from a [vector database](../RAG/Components/vectorstores.md)
-4. [Creates a prompt template](../RAG/Components/prompt.md) with the retrieved context
+1. [Rewrites/processes](../../API%20Reference/Modules/rewriters.md) the user query
+2. [Creates embeddings](../../API%20Reference/Embedders/chunk_embedder.md) from the processed query
+3. Retrieves relevant chunks from a [vector database](../../API%20Reference/Vectorstore/qdrant_vectorstore.md)
+4. [Creates a prompt template](../../API%20Reference/Modules/Prompt/ChatPromptTemplate.md) with the retrieved context
 5. Generates a response using an LLM
 6. Returns the generated response
 

@@ -2,7 +2,7 @@
 
 Parsers are pipeline components that convert documents into structured hierarchical Node representations. They extract text, layout information, and metadata from various document formats to create tree-like data structures for further processing.
 
-Each parser should return a [Node](../Other_Concepts/node.md) object, which is a hierarchical representation of the document content.
+Each parser should return a [Node](../../Type/node.md) object, which is a hierarchical representation of the document content.
 
 If you write a custom parser that returns a different type of object (for example, the plain text of the document content), you must use a [TreeBuilder](../treebuilder.md) to convert it into a Node.
 

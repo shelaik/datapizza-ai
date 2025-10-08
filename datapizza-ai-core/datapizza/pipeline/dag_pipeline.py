@@ -129,7 +129,7 @@ class DagPipeline:
 
         return args
 
-    def run(self, data: dict):
+    def run(self, data: dict) -> dict:
         """
         Run the pipeline.
 
@@ -220,7 +220,7 @@ class DagPipeline:
 
         return pipeline_results
 
-    def from_yaml(self, config_path: str):
+    def from_yaml(self, config_path: str) -> "DagPipeline":
         """
         Load the pipeline from a YAML configuration file.
 

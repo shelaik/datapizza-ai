@@ -1,5 +1,7 @@
 import logging
-from typing import Any
+from typing import Any, Generator
+
+from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 from datapizza.core.vectorstore import VectorConfig, Vectorstore
 from datapizza.type import (
@@ -9,7 +11,6 @@ from datapizza.type import (
     EmbeddingFormat,
     SparseEmbedding,
 )
-from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 log = logging.getLogger(__name__)
 
@@ -325,7 +326,7 @@ class QdrantVectorstore(Vectorstore):
         collection_name: str,
         page_size: int = 100,
         with_vectors: bool = False,
-    ):
+    ) -> Generator[Chunk]:
         """
         Dumps all points from a collection in a chunk-wise manner.
 

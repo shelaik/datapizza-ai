@@ -46,7 +46,7 @@ class IngestionPipeline:
         Initialize the ingestion pipeline.
 
         Args:
-            Modules (list[PipelineComponent], optional): List of pipeline components. Defaults to None.
+            modules (list[PipelineComponent], optional): List of pipeline components. Defaults to None.
             vector_store (Vectorstore, optional): Vector store to store the ingested data. Defaults to None.
             collection_name (str, optional): Name of the vector store collection to store the ingested data. Defaults to None.
         """
@@ -58,7 +58,7 @@ class IngestionPipeline:
         if self.vector_store and not self.collection_name:
             raise ValueError("Collection name must be set if vector store is provided")
 
-    def run(self, file_path: str | list[str], metadata: dict | None = None):
+    def run(self, file_path: str | list[str], metadata: dict | None = None) -> list[Chunk] | None:
         """Run the ingestion pipeline.
 
         Args:
@@ -95,7 +95,7 @@ class IngestionPipeline:
                 "Data returned from pipeline must be a list of Chunk objects"
             )
 
-    async def a_run(self, file_path: str | list[str], metadata: dict | None = None):
+    async def a_run(self, file_path: str | list[str], metadata: dict | None = None) -> list[Chunk] | None:
         """
         Run the ingestion pipeline asynchronously.
 
@@ -133,7 +133,7 @@ class IngestionPipeline:
                 "Data returned from pipeline must be a list of Chunk objects"
             )
 
-    def from_yaml(self, config_path: str):
+    def from_yaml(self, config_path: str) -> "IngestionPipeline":
         """
         Load the ingestion pipeline from a YAML configuration file.
 

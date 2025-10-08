@@ -174,7 +174,7 @@ class Memory:
         content_string = "||".join(hash_components)
         return int(hashlib.sha256(content_string.encode("utf-8")).hexdigest(), 16)
 
-    def json_dumps(self):
+    def json_dumps(self) -> str:
         """Serialize the memory to JSON.
 
         Returns:
@@ -195,7 +195,7 @@ class Memory:
                 role=ROLE(t["role"]),
             )
 
-    def to_dict(self):
+    def to_dict(self) -> list[dict]:
         """Convert memory to a dictionary.
 
         Returns:
