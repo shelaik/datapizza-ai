@@ -416,7 +416,7 @@ class Agent:
 
     def _execute_planning_step(
         self, current_step, planning_prompt: str, memory: Memory, **kwargs
-    ) -> Generator[StepResult | ClientResponse, None]:
+    ) -> Generator[StepResult | ClientResponse, None, None]:
         """Execute a planning step with streaming support."""
         tool_results = []
 

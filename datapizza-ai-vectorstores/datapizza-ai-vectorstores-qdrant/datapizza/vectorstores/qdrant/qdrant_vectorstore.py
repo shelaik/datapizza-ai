@@ -2,6 +2,8 @@ import logging
 from collections.abc import Generator
 from typing import Any
 
+from qdrant_client import AsyncQdrantClient, QdrantClient, models
+
 from datapizza.core.vectorstore import VectorConfig, Vectorstore
 from datapizza.type import (
     Chunk,
@@ -10,7 +12,6 @@ from datapizza.type import (
     EmbeddingFormat,
     SparseEmbedding,
 )
-from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 log = logging.getLogger(__name__)
 
@@ -326,7 +327,7 @@ class QdrantVectorstore(Vectorstore):
         collection_name: str,
         page_size: int = 100,
         with_vectors: bool = False,
-    ) -> Generator[Chunk]:
+    ) -> Generator[Chunk, None, None]:
         """
         Dumps all points from a collection in a chunk-wise manner.
 
