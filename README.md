@@ -10,7 +10,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/datapizza-ai.svg)](https://pypi.org/project/datapizza-ai/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Downloads](https://img.shields.io/pypi/dm/datapizza-ai.svg)](https://pypi.org/project/datapizza-ai/)
-[![GitHub stars](https://img.shields.io/github/stars/datapizza-tech/datapizza-ai.svg?style=social&label=Star)](https://github.com/datapizza-labs/datapizza-ai)
+[![GitHub stars](https://img.shields.io/github/stars/datapizza-labs/datapizza-ai.svg?style=social&label=Star)](https://github.com/datapizza-labs/datapizza-ai)
 
 [🚀 Quick Start](#-quick-start) • [📖 Documentation](https://docs.datapizza.tech) • [🎯 Examples](#-examples) • [🤝 Community](#-community)
 
@@ -317,9 +317,8 @@ print(f"Generated response: {result['generator']}")
 ## 🎓 Learning Resources
 
 - 📖 **[Complete Documentation](https://docs.datapizza.tech)** - Comprehensive guides and API reference
-- 🚀 **[Quick Start Guide](https://docs.datapizza.tech/guides/quick-start)** - Get up and running in minutes
-- 🎯 **[RAG Tutorial](https://docs.datapizza.tech/guides/rag)** - Build production RAG systems
-- 🤖 **[Agent Examples](https://docs.datapizza.tech/examples/agents)** - Real-world agent implementations
+- 🎯 **[RAG Tutorial](https://docs.datapizza.tech/latest/Guides/RAG/rag/)** - Build production RAG systems
+- 🤖 **[Agent Examples](https://docs.datapizza.tech/latest/Guides/agent/)** - Real-world agent implementations
 
 ## 🤝 Community
 
