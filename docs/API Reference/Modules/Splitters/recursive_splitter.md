@@ -12,15 +12,15 @@
 ## Usage
 
 ```python
-from datapizza.modules.splitters import RecursiveSplitter
 from datapizza.modules.parsers import TextParser
+from datapizza.modules.splitters import RecursiveSplitter
 
 splitter = RecursiveSplitter(
-    max_char=1000,
-    overlap=100,
+    max_char=10,
+    overlap=1,
 )
 
-# Parse text into nodes
+# Parse text into nodes because RecursiveSplitter need Node
 parser = TextParser()
 document = parser.parse("""
 This is the first section of the document.
@@ -33,9 +33,8 @@ The final section concludes the document.
 It summarizes the key points discussed.
 """)
 
-
-
 chunks = splitter.split(document)
+print(chunks)
 ```
 
 ## Features

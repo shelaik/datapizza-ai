@@ -12,17 +12,17 @@ Treebuilders are pipeline components that construct hierarchical tree structures
 A treebuilder that uses language models to analyze content and create hierarchical structures based on semantic understanding.
 
 ```python
+from datapizza.clients.openai import OpenAIClient
 from datapizza.modules.treebuilder import LLMTreeBuilder
-from datapizza.clients import OpenAIClient
 
-client = OpenAIClient(api_key="your-api-key")
-treebuilder = LLMTreeBuilder(
-    client=client,
-    system_prompt="Analyze the content and create a logical hierarchical structure.",
-)
+client = OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4o")
+treebuilder = LLMTreeBuilder(client=client)
 
-# Build tree from flat content
+flat_content = "This is a flat piece of content. It should be converted into a hierarchical structure."
+
 structured_document = treebuilder.parse(flat_content)
+
+print(structured_document)
 ```
 
 **Features:**
@@ -39,15 +39,12 @@ structured_document = treebuilder.parse(flat_content)
 ### Basic Tree Structure Creation
 ```python
 from datapizza.modules.treebuilder import LLMTreeBuilder
-from datapizza.clients import OpenAIClient
+from datapizza.clients.openai import OpenAIClient
 
 client = OpenAIClient(api_key="your-openai-key")
 
 # Create basic treebuilder
-treebuilder = LLMTreeBuilder(
-    client=client,
-    system_prompt="You are an expert at organizing content into logical hierarchies.",
-)
+treebuilder = LLMTreeBuilder(client=client)
 
 # Unstructured content
 flat_content = """

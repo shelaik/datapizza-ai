@@ -91,7 +91,6 @@ class PipelineComponent(ABC):
             f"{self.__class__.__name__} must implement the _run method"
         )
 
-    @abstractmethod
     async def _a_run(self, *args, **kwargs) -> Any:
         """
         The asynchronous core processing logic of the component.

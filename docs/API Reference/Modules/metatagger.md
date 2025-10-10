@@ -13,7 +13,7 @@ A metatagger that uses language models to generate keywords and metadata for tex
 
 ```python
 from datapizza.modules.metatagger import KeywordMetatagger
-from datapizza.clients import OpenAIClient
+from datapizza.clients.openai import OpenAIClient
 
 client = OpenAIClient(api_key="your-api-key")
 metatagger = KeywordMetatagger(
@@ -46,12 +46,14 @@ tagged_chunks = metatagger.tag(chunks)
 
 ### Basic Keyword Extraction
 ```python
+import uuid
+
+from datapizza.clients.openai import OpenAIClient
 from datapizza.modules.metatagger import KeywordMetatagger
-from datapizza.clients import OpenAIClient
 from datapizza.type import Chunk
 
 # Initialize client and metatagger
-client = OpenAIClient(api_key="your-openai-key")
+client = OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4o")
 metatagger = KeywordMetatagger(
     client=client,
     system_prompt="You are a keyword extraction expert. Generate relevant, concise keywords.",
@@ -61,59 +63,14 @@ metatagger = KeywordMetatagger(
 
 # Process chunks
 chunks = [
-    Chunk(content="Machine learning algorithms are transforming healthcare diagnostics."),
-    Chunk(content="Climate change impacts ocean temperatures and marine ecosystems.")
+    Chunk(id=str(uuid.uuid4()), text="Machine learning algorithms are transforming healthcare diagnostics."),
+    Chunk(id=str(uuid.uuid4()), text="Climate change impacts ocean temperatures and marine ecosystems.")
 ]
 
 tagged_chunks = metatagger.tag(chunks)
 
 # Access generated keywords
 for chunk in tagged_chunks:
-    print(f"Content: {chunk.content}")
+    print(f"Content: {chunk.text}")
     print(f"Keywords: {chunk.metadata.get('keywords', [])}")
-```
-
-### Custom Metadata Fields
-```python
-# Create different metataggers for different types of metadata
-topic_tagger = KeywordMetatagger(
-    client=client,
-    user_prompt="Identify the main topic category for this text:",
-    keyword_name="topic"
-)
-
-sentiment_tagger = KeywordMetatagger(
-    client=client,
-    user_prompt="Analyze the sentiment of this text (positive/negative/neutral):",
-    keyword_name="sentiment"
-)
-
-# Apply multiple metataggers
-chunks = topic_tagger(chunks)
-chunks = sentiment_tagger(chunks)
-```
-
-### Domain-Specific Tagging
-```python
-# Medical text keyword extraction
-medical_metatagger = KeywordMetatagger(
-    client=client,
-    system_prompt="""
-    You are a medical text analysis expert. Extract keywords relevant to:
-    - Medical conditions and symptoms
-    - Treatments and procedures
-    - Anatomical terms
-    - Medical specialties
-    """,
-    user_prompt="Extract medical keywords and terms from this clinical text:",
-    keyword_name="medical_keywords"
-)
-
-# Legal document tagging
-legal_metatagger = KeywordMetatagger(
-    client=client,
-    system_prompt="Extract legal terms, case references, and key concepts.",
-    user_prompt="Identify important legal keywords and references:",
-    keyword_name="legal_terms"
-)
 ```

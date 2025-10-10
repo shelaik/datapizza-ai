@@ -56,10 +56,8 @@ chunks = splitter.split(document)
 # Examine the structured chunks
 for i, chunk in enumerate(chunks):
     print(f"Chunk {i+1}:")
-    print(f"  Type: {chunk.node_type.value}")
-    print(f"  Content length: {len(chunk.content)}")
-    print(f"  Children: {len(chunk.children)}")
-    print(f"  Content preview: {chunk.content[:80]}...")
+    print(f"  Content length: {len(chunk.text)}")
+    print(f"  Content preview: {chunk.text[:80]}...")
     print("---")
 ```
 

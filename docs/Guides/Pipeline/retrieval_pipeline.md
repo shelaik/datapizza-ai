@@ -10,7 +10,7 @@ Modules are the building blocks of the pipeline. They are typically instances of
 
 ```python
 from datapizza.core.models import PipelineComponent
-from datapizza.pipeline.retrieval_pipeline import DagPipeline
+from datapizza.pipeline import DagPipeline
 
 class MyProcessingStep(PipelineComponent):
     # Inheriting from PipelineComponent provides the __call__ wrapper for logging
@@ -32,27 +32,32 @@ Connections define the flow of data between modules. You specify which module's 
 -   **`target_key`** : This key specifies the argument name in the target module's `process` method (or callable) that should receive the data. If `None`, and the source output is *not* a dictionary, the data is passed as the first non-`self` argument to the target's `_run` method/callable. If `None` and the source output *is* a dictionary, its key-value pairs are merged into the target's input keyword arguments.
 
 ```python
+from datapizza.clients.openai import OpenAIClient
+from datapizza.core.models import PipelineComponent
+from datapizza.core.vectorstore import VectorConfig
+from datapizza.embedders.openai import OpenAIEmbedder
+from datapizza.modules.prompt import ChatPromptTemplate
+from datapizza.modules.rewriters import ToolRewriter
+from datapizza.pipeline import DagPipeline
+from datapizza.vectorstores.qdrant import QdrantVectorstore
 
-
-client = OpenAIClient(api_key="YOUR_API_KEY", model="gpt-4o-mini")
-vector_store = QdrantVectorstore(location = ":memory:")
-vector_store.create_collection(collection_name="datapizza", vector_config=[VectorConfig(dimensions=1536, name="vector_name")])
+client = OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4o-mini")
+vector_store = QdrantVectorstore(host="localhost", port=6333)
+vector_store.create_collection(collection_name="my_documents", vector_config=[VectorConfig(dimensions=1536, name="vector_name")])
 
 pipeline = DagPipeline()
 
 pipeline.add_module("rewriter", ToolRewriter(client=client, system_prompt="rewrite the query to perform a better search in a vector database"))
-pipeline.add_module("embedder", ClientEmbedder(client = openai_embedder))
+pipeline.add_module("embedder", OpenAIEmbedder(api_key="OPENAI_API_KEY", model_name="text-embedding-3-small"))
 pipeline.add_module("vector_store", QdrantVectorstore(host = "localhost"))
-pipeline.add_module("prompt_template", ChatPromptTemplate(user_prompt_template = "this is a user prompt: {{ user_prompt }}", system_prompt_template = "this is a system prompt: {{ system_prompt }}", retrieval_prompt_template = "{% for chunk in chunks %} Relevant chunk: {{ chunk.text }} \n\n {% endfor %}"))
-pipeline.add_module("llm", OpenAIClient(model = "gpt-4o-mini", api_key = os.getenv("OPENAI_API_KEY")))
+pipeline.add_module("prompt_template", ChatPromptTemplate(user_prompt_template = "this is a user prompt: {{ user_prompt }}", retrieval_prompt_template = "{% for chunk in chunks %} Relevant chunk: {{ chunk.text }} \n\n {% endfor %}"))
+pipeline.add_module("llm", OpenAIClient(model = "gpt-4o-mini", api_key = "OPENAI_API_KEY"))
 
 
 pipeline.connect("rewriter", "embedder", target_key="text")
 pipeline.connect("embedder", "vector_store", target_key="query_vector")
 pipeline.connect("vector_store", "prompt_template", target_key="chunks")
 pipeline.connect("prompt_template", "llm", target_key="memory")
-
-
 ```
 
 ## Running the Pipeline
@@ -62,6 +67,7 @@ The `run` method executes the pipeline based on the defined connections. It requ
 The keys of this dictionary should match the names of the modules requiring initial input, and the values should be dictionaries mapping argument names to values for their respective `process` methods (or callables).
 
 ```python
+user_input = "tell me something about this document"
 res = pipeline.run(
     {
         "rewriter": {"user_prompt": user_input},
@@ -70,7 +76,7 @@ res = pipeline.run(
 
         "prompt_template": {"user_prompt": user_input},  # Prompt template requires user_prompt
         "vector_store": {
-            "collection_name": "datapizza",
+            "collection_name": "my_documents",
             "k": 10,
         },
         "llm": {
@@ -80,6 +86,7 @@ res = pipeline.run(
     }
 )
 result = res.get("llm").text
+print(result)
 ```
 
 The pipeline automatically determines the execution order based on dependencies. It executes modules by calling their `run` method only when all their prerequisites (connected `from_node_name` modules) have completed successfully.
@@ -118,11 +125,20 @@ Pipelines can be defined entirely using a YAML configuration file, which is load
 The YAML structure includes sections for `clients` (like LLM providers), `modules`, and `connections`.
 
 ```python
-pipeline = DagPipeline()
-pipeline.from_yaml("path/to/your/config.yaml")
+from datapizza.pipeline import DagPipeline
 
-# Now the pipeline is configured and ready to run
-# results = pipeline.run(initial_data_for_yaml_config)
+pipeline = DagPipeline().from_yaml("dag_pipeline.yaml")
+user_input = "tell me something about this document"
+res = pipeline.run(
+    {
+        "rewriter": {"user_prompt": user_input},
+        "prompt_template": {"user_prompt": user_input},
+        "vector_store": {"collection_name": "my_documents","k": 10,},
+        "llm": {"input": user_input,"system_prompt": "You are a helpful assistant. try to answer user questions given the context",},
+    }
+)
+result = res.get("llm").text
+print(result)
 ```
 
 ### Example YAML (`dag_config.yaml`)
@@ -140,12 +156,10 @@ dag_pipeline:
       api_key: ${GOOGLE_API_KEY}
     openai_embedder:
       provider: openai
-      model: "text-embedding-3-large"
+      model: "text-embedding-3-small"
       api_key: ${OPENAI_API_KEY}
 
   modules:
-
-
     - name: rewriter
       type: ToolRewriter
       module: datapizza.modules.rewriters
@@ -159,7 +173,7 @@ dag_pipeline:
         client: openai_embedder
     - name: vector_store
       type: QdrantVectorstore
-      module: datapizza.vectorstores
+      module: datapizza.vectorstores.qdrant
       params:
         host: localhost
     - name: prompt_template
@@ -167,14 +181,13 @@ dag_pipeline:
       module: datapizza.modules.prompt
       params:
         user_prompt_template: "this is a user prompt: {{ user_prompt }}"
-        system_prompt_template: "this is a system prompt: {{ system_prompt }}"
         retrieval_prompt_template: "{% for chunk in chunks %} Relevant chunk: {{ chunk.text }} \n\n {% endfor %}"
     - name: llm
-      type: GoogleClient
-      module: datapizza.clients
+      type: OpenAIClient
+      module: datapizza.clients.openai
       params:
-        model: "gemini-2.5-pro-preview-03-25"
-        api_key: ${GOOGLE_API_KEY}
+        model: "gpt-4o-mini"
+        api_key: ${OPENAI_API_KEY}
 
   connections:
 
@@ -190,8 +203,6 @@ dag_pipeline:
     - from: prompt_template
       to: llm
       target_key: memory
-
-
 ```
 
 **Key points for YAML configuration:**

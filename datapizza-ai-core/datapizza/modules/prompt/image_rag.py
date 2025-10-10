@@ -1,6 +1,3 @@
-import base64
-import uuid
-
 from jinja2 import Template
 
 from datapizza.core.modules.prompt import Prompt
@@ -20,16 +17,13 @@ class ImageRAGPrompt(Prompt):
         user_prompt_template : str,
         image_prompt_presentation : str,
         each_image_template : str,
-        main_folder : str,
     ):
         """
         Args:
             user_prompt_template: str # The user prompt jinja template
             image_prompt_presentation: str # The image prompt jinja template
             each_image_template: str # The each image jinja template
-            main_folder: str # The main folder
         """
-        self.main_folder = main_folder
         self.user_prompt_template = Template(user_prompt_template)
         self.image_prompt_presentation = image_prompt_presentation
         self.each_image_template = Template(each_image_template)
@@ -51,10 +45,6 @@ class ImageRAGPrompt(Prompt):
                 file_path=path_pdf,
                 page_number=page_number,
             )
-
-            image_id = str(uuid.uuid4())
-            with open(f"{self.main_folder}/image_{image_id}.png", "wb") as f:
-                f.write(base64.b64decode(image_as_base64))
 
             media = Media(
                 media_type="image",

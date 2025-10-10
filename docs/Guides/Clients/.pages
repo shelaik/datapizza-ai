@@ -5,3 +5,4 @@ nav:
     - streaming.md
     - tools.md
     - chatbot.md
+    - local_model.md

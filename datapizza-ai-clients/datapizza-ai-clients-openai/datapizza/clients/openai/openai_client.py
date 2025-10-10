@@ -160,7 +160,7 @@ class OpenAIClient(Client):
         elif isinstance(tool_choice, list):
             return {
                 "type": "function",
-                "function": {"name": tool_choice[0]},
+                "name": tool_choice[0],
             }
         else:
             return tool_choice

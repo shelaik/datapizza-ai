@@ -122,12 +122,17 @@ Here's an example of a question answering pipeline that uses embeddings to retri
 
 Define the components:
 ```python
-from datapizza.clients import GoogleClient, OpenAIClient
-from datapizza.embedders import ClientEmbedder
+from datapizza.clients.google import GoogleClient
+from datapizza.clients.openai import OpenAIClient
+from datapizza.core.vectorstore import VectorConfig
+from datapizza.embedders.openai import OpenAIEmbedder
 from datapizza.modules.prompt import ChatPromptTemplate
 from datapizza.modules.rewriters import ToolRewriter
 from datapizza.pipeline import Dependency, FunctionalPipeline
-from datapizza.vectorstores import QdrantVectorstore
+from datapizza.vectorstores.qdrant import QdrantVectorstore
+from dotenv import load_dotenv
+
+load_dotenv()
 
 rewriter = ToolRewriter(
     client=OpenAIClient(
@@ -136,14 +141,12 @@ rewriter = ToolRewriter(
         system_prompt="Use only 1 time the tool to answer the user prompt.",
     )
 )
-embedder = ClientEmbedder(
-    client=OpenAIClient(
-        api_key=os.getenv("OPENAI_API_KEY"), model="text-embedding-3-large"
-    )
+embedder = OpenAIEmbedder(
+    api_key=os.getenv("OPENAI_API_KEY"), model_name="text-embedding-3-small"
 )
 
-vector_store = QdrantVectorstore(location=":memory:")
-vector_store.create_collection(collection_name="datapizza", vector_config=[VectorConfig(dimensions=1536, name="vector_name")])
+vector_store = QdrantVectorstore(host="localhost", port=6333)
+vector_store.create_collection(collection_name="my_documents", vector_config=[VectorConfig(dimensions=1536, name="vector_name")])
 vector_store = vector_store.as_module_component() # required to use the vectorstore in the pipeline
 
 prompt_template = ChatPromptTemplate(
@@ -155,27 +158,23 @@ generator = GoogleClient(
     system_prompt="You are a senior Software Engineer. You are given a user prompt and you need to answer it given the context of the chunks.",
 ).as_module_component()
 
-
 ```
 
 And now create and execute the pipeline
 
 ```python
-
-# Build the pipeline
 pipeline = (FunctionalPipeline()
-    .run(name="rewriter", node=rewriter, kwargs={"user_prompt": "What is machine learning?"})
+    .run(name="rewriter", node=rewriter, kwargs={"user_prompt": "tell me something about this document"})
     .then(name="embedder", node=embedder, target_key="text")
     .then(name="vector_store", node=vector_store, target_key="query_vector", 
-          kwargs={"collection_name": "knowledge_base", "k": 4})
-    .then(name="prompt_template", node=prompt_template, target_key="chunks")
-    .then(name="generator", node=generator, target_key="memory", 
-          kwargs={"input": "What is machine learning?"})
+          kwargs={"collection_name": "my_documents", "k": 4})
+    .then(name="prompt_template", node=prompt_template, target_key="chunks" , kwargs={"user_prompt": "tell me something about this document"})
+    .then(name="generator", node=generator, target_key="memory", kwargs={"input": "tell me something about this document"})
     .get("generator")
 )
 
-# Execute the pipeline
 result = pipeline.execute()
+print(result)
 ```
 
 When using `.then()`, the `target_key` parameter specifies the input parameter name for the current node's `run()` method that will receive the output from the previous node. In other words, `target_key` defines how the previous node's output gets mapped into the current node's `run()` method parameters.
@@ -194,21 +193,20 @@ This pipeline:
 ### Branch and loop usage example
 
 ```python
-
 from datapizza.core.models import PipelineComponent
 from datapizza.pipeline import Dependency, FunctionalPipeline
 
 
 class Scraper(PipelineComponent):
-    def run(self, number_of_links: int = 1):
+    def _run(self, number_of_links: int = 1):
         return ["example.com"] * number_of_links
 
 class UpperComponent(PipelineComponent):
-    def run(self, item):
+    def _run(self, item):
         return item.upper()
 
 class SendNotification(PipelineComponent):
-    def run(self ):
+    def _run(self ):
         return "No Url found, Notification sent"
 
 send_notification = FunctionalPipeline().run(name="send_notification", node=SendNotification())
@@ -232,6 +230,4 @@ pipeline = (
 
 results = pipeline.execute(initial_data={"get_link": {"number_of_links": 0}}) # put 1 to test the other branch
 print(results)
-
-
 ```

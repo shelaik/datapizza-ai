@@ -40,12 +40,17 @@ embedded_chunks = embedder.embed(chunks)
 ### Basic Chunk Embedding
 
 ```python
+import os
+
 from datapizza.embedders import ChunkEmbedder
-from datapizza.core.clients import OpenAIClient
+from datapizza.embedders.openai import OpenAIEmbedder
 from datapizza.type import Chunk
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Create client and embedder
-client = OpenAIEmbedder(api_key="your-api-key")
+client = OpenAIEmbedder(api_key=os.getenv("OPENAI_API_KEY"))
 embedder = ChunkEmbedder(
     client=client,
     model_name="text-embedding-ada-002",
@@ -54,9 +59,9 @@ embedder = ChunkEmbedder(
 
 # Create sample chunks
 chunks = [
-    Chunk(text="First chunk of text", metadata={"source": "doc1"}),
-    Chunk(text="Second chunk of text", metadata={"source": "doc2"}),
-    Chunk(text="Third chunk of text", metadata={"source": "doc3"})
+    Chunk(id="1", text="First chunk of text", metadata={"source": "doc1"}),
+    Chunk(id="2", text="Second chunk of text", metadata={"source": "doc2"}),
+    Chunk(id="3", text="Third chunk of text", metadata={"source": "doc3"})
 ]
 
 # Embed chunks (modifies chunks in-place)

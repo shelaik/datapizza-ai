@@ -44,17 +44,17 @@ vectorstore = QdrantVectorstore(
 ### Basic Setup and Collection Creation
 
 ```python
+from datapizza.core.vectorstore import Distance, VectorConfig
+from datapizza.type import EmbeddingFormat
 from datapizza.vectorstores.qdrant import QdrantVectorstore
-from datapizza.core.vectorstore import VectorConfig
-from datapizza.type import EmbeddingFormat, Distance
 
-vectorstore = QdrantVectorstore(host="localhost", port=6333)
+vectorstore = QdrantVectorstore(location=":memory:")
 
 # Create collection with vector configuration
 vector_config = [
     VectorConfig(
         name="text_embeddings",
-        dimensions=384,
+        dimensions=3,
         format=EmbeddingFormat.DENSE,
         distance=Distance.COSINE
     )
@@ -64,24 +64,23 @@ vectorstore.create_collection(
     collection_name="documents",
     vector_config=vector_config
 )
-```
 
-### Adding and Searching Chunks
+# Add nodes and search
 
-```python
-from datapizza.vectorstores.qdrant import QdrantVectorstore
+import uuid
 from datapizza.type import Chunk, DenseEmbedding
-
-vectorstore = QdrantVectorstore(host="localhost")
+from datapizza.vectorstores.qdrant import QdrantVectorstore
 
 # Create chunks with embeddings
 chunks = [
     Chunk(
+        id=str(uuid.uuid4()),
         text="First document content",
         metadata={"source": "doc1.txt"},
         embeddings=[DenseEmbedding(name="text_embeddings", vector=[0.1, 0.2, 0.3])]
     ),
     Chunk(
+        id=str(uuid.uuid4()),
         text="Second document content",
         metadata={"source": "doc2.txt"},
         embeddings=[DenseEmbedding(name="text_embeddings", vector=[0.4, 0.5, 0.6])]

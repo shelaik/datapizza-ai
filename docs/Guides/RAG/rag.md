@@ -20,6 +20,10 @@ The ingestion pipeline processes raw documents and stores them in a vector datab
 
 ### Basic Ingestion Setup
 
+```sh
+pip install datapizza-ai-parsers-docling
+```
+
 ```python
 from datapizza.clients.openai import OpenAIClient
 from datapizza.core.vectorstore import VectorConfig

@@ -54,24 +54,26 @@ Common reranking models available through Together AI:
 ### Basic Usage
 
 ```python
+import uuid
+
 from datapizza.modules.rerankers.together import TogetherReranker
 from datapizza.type import Chunk
 
 # Initialize with specific model
 reranker = TogetherReranker(
-    api_key="your-together-key",
-    model="sentence-transformers/msmarco-bert-base-dot-v5",
+    api_key="TOGETHER_API_KEY",
+    model="Salesforce/Llama-Rank-V1",
     top_n=10,
     threshold=0.4
 )
 
 # Sample chunks
 chunks = [
-    Chunk(content="Neural networks are computational models inspired by biological brains..."),
-    Chunk(content="Deep learning uses multiple layers to learn complex patterns..."),
-    Chunk(content="Backpropagation is the algorithm used to train neural networks..."),
-    Chunk(content="The weather is sunny today with mild temperatures..."),
-    Chunk(content="Convolutional neural networks excel at image recognition tasks...")
+    Chunk(id=str(uuid.uuid4()), text="Neural networks are computational models inspired by biological brains..."),
+    Chunk(id=str(uuid.uuid4()), text="Deep learning uses multiple layers to learn complex patterns..."),
+    Chunk(id=str(uuid.uuid4()), text="Backpropagation is the algorithm used to train neural networks..."),
+    Chunk(id=str(uuid.uuid4()), text="The weather is sunny today with mild temperatures..."),
+    Chunk(id=str(uuid.uuid4()), text="Convolutional neural networks excel at image recognition tasks...")
 ]
 
 query = "How do neural networks learn?"
@@ -82,5 +84,5 @@ reranked_results = reranker.rerank(query, chunks)
 # Display results
 for i, chunk in enumerate(reranked_results):
     score = chunk.metadata.get('relevance_score', 'N/A')
-    print(f"Rank {i+1} (Score: {score}): {chunk.content[:70]}...")
+    print(f"Rank {i+1} (Score: {score}): {chunk.text[:70]}...")
 ```

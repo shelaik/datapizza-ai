@@ -49,10 +49,10 @@ from datapizza.tools.duckduckgo import DuckDuckGoSearchTool
 agent = Agent(
     name="agent",
     tools=[DuckDuckGoSearchTool()],
-    client=OpenAIClient(api_key="YOUR_API_KEY", model="gpt-4o-mini"),
+    client=OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4.1"),
 )
 
-response = agent.run("What is datapizza? and who are the founders?")
+response = agent.run("What is datapizza? and who are the founders?", tool_choice="required_first")
 print(response)
 
 ```

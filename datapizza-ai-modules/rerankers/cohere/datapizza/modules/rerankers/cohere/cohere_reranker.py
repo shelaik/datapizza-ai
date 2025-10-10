@@ -11,6 +11,7 @@ class CohereReranker(Reranker):
         endpoint: str,
         top_n: int = 10,
         threshold: float | None = None,
+        model: str  = "model",
     ):
         """
         Args:
@@ -24,6 +25,7 @@ class CohereReranker(Reranker):
         self.endpoint = endpoint
         self.top_n = top_n
         self.threshold = threshold
+        self.model = model
 
         self.client = None
         self.a_client = None
@@ -75,7 +77,7 @@ class CohereReranker(Reranker):
         client = self._get_client()
 
         response = client.rerank(
-            model="model",
+            model=self.model,
             query=query,
             documents=[single_document.text for single_document in documents],
             top_n=self.top_n,
@@ -112,7 +114,7 @@ class CohereReranker(Reranker):
         client = self._get_a_client()
 
         response = await client.rerank(
-            model="model",
+            model=self.model,
             query=query,
             documents=[single_document.text for single_document in documents],
             top_n=self.top_n,

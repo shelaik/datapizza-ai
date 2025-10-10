@@ -13,7 +13,7 @@ from datapizza.type import (
 )
 
 
-class OpenAICompletionMemoryAdapter(MemoryAdapter):
+class OpenAILikeMemoryAdapter(MemoryAdapter):
     def _turn_to_message(self, turn: Turn) -> dict:
         content = []
         tool_calls = []

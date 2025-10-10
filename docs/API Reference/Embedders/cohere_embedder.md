@@ -19,7 +19,7 @@ from datapizza.embedders.cohere import CohereEmbedder
 
 embedder = CohereEmbedder(
     api_key="your-cohere-api-key",
-    endpoint="https://api.cohere.ai/v1",
+    base_url="https://api.cohere.ai/v1",
     input_type="search_document"  # or "search_query"
 )
 
@@ -51,7 +51,7 @@ from datapizza.embedders.cohere import CohereEmbedder
 
 embedder = CohereEmbedder(
     api_key="your-cohere-api-key",
-    endpoint="https://api.cohere.ai/v1",
+    base_url="https://api.cohere.ai/v1",
     input_type="search_document"
 )
 
@@ -71,7 +71,7 @@ from datapizza.embedders.cohere import CohereEmbedder
 # Configure for search queries
 embedder = CohereEmbedder(
     api_key="your-cohere-api-key",
-    endpoint="https://api.cohere.ai/v1",
+    base_url="https://api.cohere.ai/v1",
     input_type="search_query"
 )
 
@@ -88,7 +88,7 @@ from datapizza.embedders.cohere import CohereEmbedder
 
 embedder = CohereEmbedder(
     api_key="your-cohere-api-key",
-    endpoint="https://api.cohere.ai/v1"
+    base_url="https://api.cohere.ai/v1"
 )
 
 texts = [
@@ -112,7 +112,7 @@ from datapizza.embedders.cohere import CohereEmbedder
 async def embed_async():
     embedder = CohereEmbedder(
         api_key="your-cohere-api-key",
-        endpoint="https://api.cohere.ai/v1"
+        base_url="https://api.cohere.ai/v1"
     )
 
     text = "Async embedding example"

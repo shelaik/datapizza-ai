@@ -5,6 +5,7 @@ from typing import Any
 from datapizza.core.modules.parser import Parser
 from datapizza.type import Node, NodeType
 from datapizza.type.type import Media, MediaNode
+
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions

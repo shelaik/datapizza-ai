@@ -63,7 +63,8 @@ import logging
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from datapizza.clients import GoogleClient, OpenAIClient
+from datapizza.clients.google import GoogleClient
+from datapizza.clients.openai import OpenAIClient
 from datapizza.embedders import NodeEmbedder
 from datapizza.pipeline.pipeline import IngestionPipeline
 from datapizza.splitters import RecursiveSplitter

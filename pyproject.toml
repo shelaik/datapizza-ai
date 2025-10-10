@@ -45,7 +45,7 @@ members = [
     "datapizza-ai-clients/datapizza-ai-clients-google",
     "datapizza-ai-clients/datapizza-ai-clients-mistral",
     "datapizza-ai-clients/datapizza-ai-clients-openai",
-    "datapizza-ai-clients/datapizza-ai-clients-openai-completion",
+    "datapizza-ai-clients/datapizza-ai-clients-openai-like",
     
     # Embedders
     "datapizza-ai-embedders/cohere",
@@ -78,7 +78,7 @@ datapizza-ai-clients-anthropic = {workspace = true}
 datapizza-ai-clients-google = {workspace = true}
 datapizza-ai-clients-mistral = {workspace = true}
 datapizza-ai-clients-openai = {workspace = true}
-datapizza-ai-clients-openai-completion = {workspace = true}
+datapizza-ai-clients-openai-like = {workspace = true}
 
 # Embedders
 datapizza-ai-embedders-cohere = {workspace = true}

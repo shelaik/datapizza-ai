@@ -3,6 +3,7 @@ nav:
     - google.md
     - anthropic.md
     - mistral.md
+    - openai-like.md
 
 
 

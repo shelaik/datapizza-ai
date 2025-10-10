@@ -23,7 +23,8 @@ reranker = CohereReranker(
     api_key="your-cohere-api-key",
     endpoint="https://api.cohere.ai/v1",
     top_n=10,
-    threshold=0.5
+    threshold=0.5,
+    model="rerank-v3.5",
 )
 
 # Rerank chunks based on query
@@ -45,24 +46,27 @@ reranked_chunks = reranker.rerank(query, chunks)
 ### Basic Usage
 
 ```python
+import uuid
+
 from datapizza.modules.rerankers.cohere import CohereReranker
 from datapizza.type import Chunk
 
 # Initialize reranker
 reranker = CohereReranker(
-    api_key="your-cohere-key",
+    api_key="COHERE_API_KEY",
     endpoint="https://api.cohere.ai/v1",
     top_n=5,
-    threshold=0.6
+    threshold=0.6,
+    model="rerank-v3.5",
 )
 
 # Sample retrieved chunks
 chunks = [
-    Chunk(content="Machine learning enables computers to learn from data..."),
-    Chunk(content="Deep learning is a subset of machine learning..."),
-    Chunk(content="Neural networks consist of interconnected nodes..."),
-    Chunk(content="Supervised learning uses labeled training data..."),
-    Chunk(content="The weather forecast shows rain tomorrow...")
+    Chunk(id=str(uuid.uuid4()), text="Machine learning enables computers to learn from data..."),
+    Chunk(id=str(uuid.uuid4()), text="Deep learning is a subset of machine learning..."),
+    Chunk(id=str(uuid.uuid4()), text="Neural networks consist of interconnected nodes..."),
+    Chunk(id=str(uuid.uuid4()), text="Supervised learning uses labeled training data..."),
+    Chunk(id=str(uuid.uuid4()), text="The weather forecast shows rain tomorrow...")
 ]
 
 query = "What is deep learning and how does it work?"
@@ -73,5 +77,5 @@ reranked_chunks = reranker.rerank(query, chunks)
 # Display results with scores
 for i, chunk in enumerate(reranked_chunks):
     score = chunk.metadata.get('relevance_score', 'N/A')
-    print(f"Rank {i+1} (Score: {score}): {chunk.content[:80]}...")
+    print(f"Rank {i+1} (Score: {score}): {chunk.text[:80]}...")
 ```

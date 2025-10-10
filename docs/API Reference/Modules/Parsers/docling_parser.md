@@ -25,11 +25,9 @@ from datapizza.modules.parsers.docling import DoclingParser
 
 # Basic usage
 parser = DoclingParser()
-document_node = parser.parse("document.pdf")
+document_node = parser.parse("sample.pdf")
 
-# With JSON output directory for debugging
-parser = DoclingParser(json_output_dir="./docling_output")
-document_node = parser.parse("document.pdf")
+print(document_node)
 ```
 
 ## Parameters

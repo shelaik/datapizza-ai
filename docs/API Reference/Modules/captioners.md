@@ -13,10 +13,11 @@ Captioners are pipeline components that generate captions and descriptions for m
 A captioner that uses language models to generate captions for media nodes (figures and tables) within document hierarchies.
 
 ```python
+from datapizza.clients.openai import OpenAIClient
 from datapizza.modules.captioners import LLMCaptioner
-from datapizza.clients import OpenAIClient
+from datapizza.type import ROLE, Media, MediaNode, NodeType
 
-client = OpenAIClient(api_key="your-api-key")
+client = OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4o")
 captioner = LLMCaptioner(
     client=client,
     max_workers=3,
@@ -24,8 +25,9 @@ captioner = LLMCaptioner(
     system_prompt_figure="Describe this figure/image in detail."
 )
 
-# Process a document node with media
+document_node = MediaNode( node_type=NodeType.FIGURE, children=[], metadata={}, media=Media(source_type="path", source="gogole.png", extension="png", media_type="image"))
 captioned_document = captioner(document_node)
+print(captioned_document)
 ```
 
 **Parameters:**

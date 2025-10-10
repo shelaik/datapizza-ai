@@ -239,6 +239,7 @@ During the planning stages, the agent spends time thinking about what the next s
 
 ```python
 agent = Agent(
+    name="Agent_with_plan",
     client=client,
     planning_interval=3,  # Plan every 3 steps
 )

@@ -18,10 +18,10 @@ from datapizza.type import (
 )
 from openai import AsyncOpenAI, OpenAI
 
-from .memory_adapter import OpenAICompletionMemoryAdapter
+from .memory_adapter import OpenAILikeMemoryAdapter
 
 
-class OpenAICompletionClient(Client):
+class OpenAILikeClient(Client):
     """A client for interacting with the OpenAI API.
 
     This class provides methods for invoking the OpenAI API to generate responses
@@ -49,7 +49,7 @@ class OpenAICompletionClient(Client):
 
         self.base_url = base_url
         self.api_key = api_key
-        self.memory_adapter = OpenAICompletionMemoryAdapter()
+        self.memory_adapter = OpenAILikeMemoryAdapter()
         self._set_client()
 
     def _set_client(self):

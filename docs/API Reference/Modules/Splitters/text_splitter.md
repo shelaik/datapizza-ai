@@ -34,7 +34,7 @@ chunks = splitter.split(text_content)
 ```python
 from datapizza.modules.splitters import TextSplitter
 
-splitter = TextSplitter.split(max_char=500, overlap=50)
+splitter = TextSplitter(max_char=50, overlap=5)
 
 text = """
 This is a sample text that we want to split into smaller chunks.
@@ -43,10 +43,10 @@ chunk size and overlap parameters. This ensures that information
 is preserved while creating manageable pieces of content.
 """
 
-chunks = splitter(text)
+chunks = splitter.split(text)
 
 for i, chunk in enumerate(chunks):
-    print(f"Chunk {i+1}: {len(chunk.content)} chars")
-    print(f"Content: {chunk.content}")
+    print(f"Chunk {i+1}: {len(chunk.text)} chars")
+    print(f"Content: {chunk.text}")
     print("---")
 ```

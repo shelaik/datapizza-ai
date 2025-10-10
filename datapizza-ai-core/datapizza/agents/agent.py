@@ -465,7 +465,7 @@ class Agent:
 
         step_action = StepResult(
             index=current_step,
-            content=response.content,
+            content=response.content + tool_results,
         )
 
         yield step_action
@@ -518,7 +518,7 @@ class Agent:
 
         step_action = StepResult(
             index=current_step,
-            content=response.content,
+            content=response.content + tool_results,
         )
 
         yield step_action

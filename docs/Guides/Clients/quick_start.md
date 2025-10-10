@@ -62,7 +62,7 @@ async def main():
         system_prompt="You are a physics teacher"  # Override system prompt
     )
 
-response = asyncio.run(main)
+response = asyncio.run(main())
 
 print(response.text)
 print(f"Tokens used: {response.completion_tokens_used}")

@@ -26,18 +26,17 @@ from datapizza.modules.prompt import prompt
 
 ### Basic Prompt Management
 ```python
-from datapizza.modules.prompt import prompt
+import uuid
+
+from datapizza.modules.prompt import ChatPromptTemplate
+from datapizza.type import Chunk
 
 # Create structured prompts for different tasks
-system_prompt = prompt.create_system_prompt(
-    role="helpful assistant",
-    context="You are helping with data analysis tasks.",
-    guidelines=["Be precise", "Show your work", "Use examples"]
+system_prompt = ChatPromptTemplate(
+    user_prompt_template="You are helping with data analysis tasks, this is the user prompt: {{ user_prompt }}",
+    retrieval_prompt_template="Retrieved content:\n{% for chunk in chunks %}{{ chunk.text }}\n{% endfor %}"
 )
 
-user_prompt = prompt.create_user_prompt(
-    task="Analyze the following data",
-    context=data_context,
-    examples=example_analyses
-)
+print(system_prompt.format(user_prompt="Hello, how are you?", chunks=[Chunk(id=str(uuid.uuid4()), text="This is a chunk"), Chunk(id=str(uuid.uuid4()), text="This is another chunk")]))
+
 ```
