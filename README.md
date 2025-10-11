@@ -128,12 +128,17 @@ Datapizza-ai provides built-in observability with OpenTelemetry tracing to help 
 
 <summary><b>🔍 Trace Your AI Operations</b></summary>
 
+```sh
+pip install datapizza-ai-tools-duckduckgo
+```
+
 ```python
-from datapizza.tracing import ContextTracing
 from datapizza.agents import Agent
 from datapizza.clients.openai import OpenAIClient
+from datapizza.tools.duckduckgo import DuckDuckGoSearchTool
+from datapizza.tracing import ContextTracing
 
-client = OpenAIClient(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAIClient(api_key="OPENAI_API_KEY")
 agent = Agent(name="assistant", client=client, tools = [DuckDuckGoSearchTool()])
 
 with ContextTracing().trace("my_ai_operation"):
@@ -212,6 +217,10 @@ print(response.text)
 ### 📊 Document Ingestion
 
 Process and index documents for retrieval-augmented generation (RAG). This pipeline automatically parses PDFs, splits them into chunks, generates embeddings, and stores them in a vector database for efficient similarity search.
+
+```sh
+pip install datapizza-ai-parsers-docling
+```
 
 ```python
 from datapizza.core.vectorstore import VectorConfig
@@ -352,5 +361,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 *A framework made to be easy to learn, easy to maintain and ready for production* 🍕
 
 [⭐ Star us on GitHub](https://github.com/datapizza-labs/datapizza-ai) • [🚀 Get Started](https://docs.datapizza.tech) • [💬 Join Discord](https://discord.gg/s5sJNHz2C8)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=datapizza-labs/datapizza-ai&type=Date)](https://www.star-history.com/#datapizza-labs/datapizza-ai&Date)
 
 </div>
