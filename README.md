@@ -301,10 +301,9 @@ print(f"Generated response: {result['generator']}")
 
 ### 🤖 Supported AI Providers
 
-<table>
+<table >
 <tr>
-<td align="center"><img src="https://unpkg.com/@lobehub/icons-static-svg@latest/icons/openai.svg" width="32"><br><b>OpenAI</b></td>
-
+<td align="center"><img src="https://logosandtypes.com/wp-content/uploads/2022/07/OpenAI.png" width="32" style="border-radius: 50%"><br><b>OpenAI</b></td>
 <td align="center"><img src="https://www.google.com/favicon.ico" width="32"><br><b>Google Gemini</b></td>
 <td align="center"><img src="https://anthropic.com/favicon.ico" width="32"><br><b>Anthropic</b></td>
 <td align="center"><img src="https://mistral.ai/favicon.ico" width="32"><br><b>Mistral</b></td>
