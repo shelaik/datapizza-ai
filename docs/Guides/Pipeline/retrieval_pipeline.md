@@ -42,14 +42,14 @@ from datapizza.pipeline import DagPipeline
 from datapizza.vectorstores.qdrant import QdrantVectorstore
 
 client = OpenAIClient(api_key="OPENAI_API_KEY", model="gpt-4o-mini")
-vector_store = QdrantVectorstore(host="localhost", port=6333)
+vector_store = QdrantVectorstore(location=":memory:")
 vector_store.create_collection(collection_name="my_documents", vector_config=[VectorConfig(dimensions=1536, name="vector_name")])
 
 pipeline = DagPipeline()
 
 pipeline.add_module("rewriter", ToolRewriter(client=client, system_prompt="rewrite the query to perform a better search in a vector database"))
 pipeline.add_module("embedder", OpenAIEmbedder(api_key="OPENAI_API_KEY", model_name="text-embedding-3-small"))
-pipeline.add_module("vector_store", QdrantVectorstore(host = "localhost"))
+pipeline.add_module("vector_store", vector_store)
 pipeline.add_module("prompt_template", ChatPromptTemplate(user_prompt_template = "this is a user prompt: {{ user_prompt }}", retrieval_prompt_template = "{% for chunk in chunks %} Relevant chunk: {{ chunk.text }} \n\n {% endfor %}"))
 pipeline.add_module("llm", OpenAIClient(model = "gpt-4o-mini", api_key = "OPENAI_API_KEY"))
 
@@ -98,6 +98,7 @@ The pipeline automatically determines the execution order based on dependencies.
 Pipeline support async run with  `a_run`
 With async run, the pipeline will call a_run of modules.
 
+This only works if you are using a remote qdrant server. The in-memory qdrant function does not work with asynchronous execution.
 ```python
 
 res = await pipeline.a_run(

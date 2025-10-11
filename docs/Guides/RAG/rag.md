@@ -126,7 +126,7 @@ pipeline.run("sample.pdf")
 
 ## Part 2: Retrieval with DagPipeline
 
-The DagPipeline enables complex retrieval workflows with query rewriting, embedding, and response generation:
+The DagPipeline enables complex retrieval workflows with query rewriting, embedding, and response generation.
 
 ### Basic Retrieval Setup
 
@@ -152,7 +152,13 @@ embedder = OpenAIEmbedder(
     api_key="YOUR_API_KEY",
     model_name="text-embedding-3-small"
 )
-retriever = QdrantVectorstore(host="localhost", port=6333).as_retriever(collection_name="my_documents", k=5)
+
+# Use the same qdrant of ingestion (prefer host and port instead of location when possible)
+retriever = QdrantVectorstore(location=":memory:")
+retriever.create_collection(
+    "my_documents",
+    vector_config=[VectorConfig(name="embedding", dimensions=1536)]
+)
 
 prompt_template = ChatPromptTemplate(
     user_prompt_template="User question: {{user_prompt}}\n:",

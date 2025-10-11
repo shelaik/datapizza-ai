@@ -12,7 +12,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/datapizza-ai.svg)](https://pypi.org/project/datapizza-ai/)
 [![GitHub stars](https://img.shields.io/github/stars/datapizza-labs/datapizza-ai.svg?style=social&label=Star)](https://github.com/datapizza-labs/datapizza-ai)
 
-[🚀 Quick Start](#-quick-start) • [📖 Documentation](https://docs.datapizza.tech) • [🎯 Examples](#-examples) • [🤝 Community](#-community)
+[🏠Homepage](https://datapizza.tech/en/ai-framework/) • [🚀 Quick Start](#-quick-start) • [📖 Documentation](https://docs.datapizza.ai) • [🎯 Examples](#-examples) • [🤝 Community](#-community)
 
 </div>
 
@@ -324,15 +324,15 @@ print(f"Generated response: {result['generator']}")
 
 ## 🎓 Learning Resources
 
-- 📖 **[Complete Documentation](https://docs.datapizza.tech)** - Comprehensive guides and API reference
-- 🎯 **[RAG Tutorial](https://docs.datapizza.tech/latest/Guides/RAG/rag/)** - Build production RAG systems
-- 🤖 **[Agent Examples](https://docs.datapizza.tech/latest/Guides/agent/)** - Real-world agent implementations
+- 📖 **[Complete Documentation](https://docs.datapizza.ai)** - Comprehensive guides and API reference
+- 🎯 **[RAG Tutorial](https://docs.datapizza.ai/latest/Guides/RAG/rag/)** - Build production RAG systems
+- 🤖 **[Agent Examples](https://docs.datapizza.ai/latest/Guides/agent/)** - Real-world agent implementations
 
 ## 🤝 Community
 
 
 - 💬 **[Discord Community](https://discord.gg/s5sJNHz2C8)** 
-- 📚 **[Documentation](https://docs.datapizza.tech)** 
+- 📚 **[Documentation](https://docs.datapizza.ai)** 
 - 📧 **[GitHub Issues](https://github.com/datapizza-labs/datapizza-ai/issues)** 
 - 🐦 **[Twitter](https://x.com/datapizza_ai)** 
 
@@ -359,7 +359,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *A framework made to be easy to learn, easy to maintain and ready for production* 🍕
 
-[⭐ Star us on GitHub](https://github.com/datapizza-labs/datapizza-ai) • [🚀 Get Started](https://docs.datapizza.tech) • [💬 Join Discord](https://discord.gg/s5sJNHz2C8)
+[⭐ Star us on GitHub](https://github.com/datapizza-labs/datapizza-ai) • [🚀 Get Started](https://docs.datapizza.ai) • [💬 Join Discord](https://discord.gg/s5sJNHz2C8)
 
 ## Star History
 

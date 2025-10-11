@@ -26,8 +26,8 @@ client = OpenAIClient(
 image = Media(
     media_type="image",
     source_type="path",
-    source="path/to/your/image.jpg",
-    extension="jpg"
+    source="image.png", # Use the correct path
+    extension="png"
 )
 
 # Create media block
@@ -76,7 +76,7 @@ image_b64 = Media(
     media_type="image",
     source_type="base64",
     source=base64_image,
-    extension="jpg"
+    extension="png"
 )
 
 response = client.invoke(
@@ -97,15 +97,15 @@ Compare or analyze multiple images in a single request:
 image1 = Media(
     media_type="image",
     source_type="path",
-    source="before.jpg",
-    extension="jpg"
+    source="before.png",
+    extension="png"
 )
 
 image2 = Media(
     media_type="image",
     source_type="path",
-    source="after.jpg",
-    extension="jpg"
+    source="after.png",
+    extension="png"
 )
 
 response = client.invoke(

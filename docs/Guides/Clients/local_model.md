@@ -1,6 +1,6 @@
 # Running with Ollama
 
-DataPizza AI supports running with local models through Ollama, providing you with complete control over your AI infrastructure while maintaining privacy and reducing costs.
+Datapizza AI supports running with local models through Ollama, providing you with complete control over your AI infrastructure while maintaining privacy and reducing costs.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ Before getting started, you'll need to have Ollama installed and running on your
 
 ## Installation
 
-Install the DataPizza AI OpenAI-like client:
+Install the Datapizza AI OpenAI-like client:
 
 ```bash
 pip install datapizza-ai-clients-openai-like
@@ -41,7 +41,7 @@ pip install datapizza-ai-clients-openai-like
 
 ## Basic Usage
 
-Here's a simple example of how to use DataPizza AI with Ollama:
+Here's a simple example of how to use Datapizza AI with Ollama:
 
 ```python
 import os

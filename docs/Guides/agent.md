@@ -1,6 +1,6 @@
 # Agent
 
-The `Agent` class is the core component for creating autonomous AI agents in DataPizzaAI. It handles task execution, tool management, memory, and planning.
+The `Agent` class is the core component for creating autonomous AI agents in Datapizza AI. It handles task execution, tool management, memory, and planning.
 
 ## Basic Usage
 
