@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/logo.png" alt="Datapizza AI Logo" width="200" height="200">
+<img src="docs/assets/logo_bg_dark.png" alt="Datapizza AI Logo" width="200" height="200">
 
 **Build reliable Gen AI solutions without overhead**
 
