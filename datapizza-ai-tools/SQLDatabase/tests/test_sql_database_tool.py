@@ -1,5 +1,7 @@
 import json
+
 import pytest
+
 from datapizza.tools.SQLDatabase.base import SQLDatabase
 
 
