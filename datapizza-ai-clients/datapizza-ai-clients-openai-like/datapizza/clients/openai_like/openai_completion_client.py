@@ -6,7 +6,6 @@ import httpx
 from datapizza.core.cache import Cache
 from datapizza.core.clients import Client, ClientResponse
 from datapizza.memory import Memory
-from datapizza.tools.tool_converter import ToolConverter
 from datapizza.tools.tools import Tool
 from datapizza.type import (
     FunctionCallBlock,
