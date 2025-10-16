@@ -20,7 +20,7 @@ from datapizza.type import (
 from mistralai import Mistral
 from mistralai.models.ocrresponse import OCRResponse
 
-from datapizza.clients.mistral.memory_adapter import MistralMemoryAdapter
+from .memory_adapter import MistralMemoryAdapter
 
 log = logging.getLogger(__name__)
 
