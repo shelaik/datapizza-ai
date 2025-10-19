@@ -2,6 +2,8 @@
 
 > Personal, **unofficial** fork of [`datapizza-labs/datapizza-ai`](https://github.com/datapizza-labs/datapizza-ai). This fork exists to experiment with a more robust **Qdrant embedded (local file) mode** and a few developer‑experience tweaks. It is **not** affiliated with the upstream project.
 
+> 📚 **Examples** → [EXAMPLES.md](examples.md)
+
 ## Why this fork?
 
 The upstream vectorstore for Qdrant could accidentally fall back to **remote HTTP mode** when users intended to run **fully local** (file‑backed) storage. This fork ships a patched `QdrantVectorstore` that makes local/embedded usage straightforward and predictable.
