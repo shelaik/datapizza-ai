@@ -123,6 +123,10 @@ git push origin main
 
 Issues and PRs are welcome **to this fork**. If you want the changes to land upstream, feel free to open a PR from your fork to `datapizza-labs/datapizza-ai` with a concise explanation (motivation, behavior change, and backwards compatibility).
 
+## Disclaimer
+
+This fork is provided **as is**, without warranty of any kind, express or implied. Use at your own risk. The author(s) of this fork and the upstream maintainers will not be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software. This fork is not affiliated with, endorsed by, or supported by the upstream project.
+
 ## License
 
 This repository retains the original **MIT License**. See [LICENSE](./LICENSE).
