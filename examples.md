@@ -48,7 +48,7 @@ client = OpenAILikeClient(
 )
 
 # Read the image as base64 (robust across platforms)
-with open("foto_prova.png", "rb") as f:
+with open("img_test.png", "rb") as f:
     b64 = base64.b64encode(f.read()).decode("utf-8")
 
 image = Media(
