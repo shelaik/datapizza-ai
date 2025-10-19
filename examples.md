@@ -53,7 +53,7 @@ with open("foto_prova.png", "rb") as f:
 
 image = Media(
     media_type="image",
-    source_type="base64",   # alternatively: "path" with source="./foto_prova.png"
+    source_type="base64",
     source=b64,
     extension="png"
 )
