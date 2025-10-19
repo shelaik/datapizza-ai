@@ -1,6 +1,8 @@
 import logging
-from collections.abc import Generator
-from typing import Any
+import inspect
+from typing import Any, Optional
+import os
+from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 from datapizza.core.vectorstore import VectorConfig, Vectorstore
 from datapizza.type import (
@@ -10,7 +12,6 @@ from datapizza.type import (
     EmbeddingFormat,
     SparseEmbedding,
 )
-from qdrant_client import AsyncQdrantClient, QdrantClient, models
 
 log = logging.getLogger(__name__)
 
@@ -18,34 +19,133 @@ log = logging.getLogger(__name__)
 class QdrantVectorstore(Vectorstore):
     """
     datapizza-ai implementation of a Qdrant vectorstore.
+
+    Patch highlights:
+    - Supports **embedded/local** mode (file-backed) *or* **server/remote** mode.
+    - Accepts `local_path` (new), `location`, or `path` for embedded mode.
+    - Detects installed `qdrant-client` constructor signature and adapts to
+      either `location=` (newer) or `path=` (older) automatically.
+    - Logs a clear message about detected version and chosen mode/argument.
+    - Avoids passing host/port when using embedded mode (prevents IDNA errors).
     """
 
     def __init__(
         self,
-        host: str | None = None,
+        host: Optional[str] | None = None,
         port: int = 6333,
-        api_key: str | None = None,
+        api_key: Optional[str] | None = None,
         **kwargs,
     ):
         """
         Initialize the QdrantVectorstore.
 
         Args:
-            host (str, optional): The host to use for the Qdrant client. Defaults to None.
-            port (int, optional): The port to use for the Qdrant client. Defaults to 6333.
-            api_key (str, optional): The API key to use for the Qdrant client. Defaults to None.
-            **kwargs: Additional keyword arguments to pass to the Qdrant client.
+            host (str, optional): Remote Qdrant host. If omitted, embedded mode is used when a local path is provided.
+            port (int, optional): Remote Qdrant port. Defaults to 6333.
+            api_key (str, optional): API key (used in remote mode if auth enabled).
+            **kwargs: May include one of `local_path`, `location`, or `path` for embedded mode,
+                      plus any other Qdrant client kwargs.
         """
-        if host is None and "location" not in kwargs:
-            raise ValueError("Either host or location must be provided")
+        # Embedded mode if any of these are provided
+        has_embedded = any(k in kwargs for k in ("local_path", "location", "path"))
+        if host is None and not has_embedded:
+            raise ValueError(
+                "Either host (remote) or local_path/location/path (embedded) must be provided"
+            )
 
         self.client: QdrantClient
-        self.a_client: AsyncQdrantClient
+        self.a_client: Optional[AsyncQdrantClient]
         self.batch_size: int = 100
-        self.host: str | None = host
+        self.host: Optional[str] | None = host
         self.port: int = port
-        self.api_key: str | None = api_key
+        self.api_key: Optional[str] | None = api_key
         self.kwargs: dict[str, Any] = kwargs
+
+        # Runtime flags
+        self.is_embedded: bool = has_embedded and host is None
+        self._embedded_param_used: Optional[str] = None  # 'location' or 'path'
+
+    # ---------- Helpers ----------
+
+    @staticmethod
+    def _supports_param(cls, param_name: str) -> bool:
+        try:
+            sig = inspect.signature(cls.__init__)
+            return param_name in sig.parameters
+        except Exception:
+            return False
+
+    @staticmethod
+    def _get_qdrant_client_version() -> str:
+        try:
+            from importlib.metadata import version, PackageNotFoundError
+        except Exception:
+            try:
+                from importlib_metadata import version, PackageNotFoundError  # type: ignore
+            except Exception:
+                version = None  # type: ignore
+                PackageNotFoundError = Exception  # type: ignore
+        if version is None:
+            return "unknown"
+        try:
+            return version("qdrant-client")
+        except PackageNotFoundError:
+            return "unknown"
+
+    def _normalize_embedded_kwargs(self, for_async: bool = False) -> dict[str, Any]:
+        """Return kwargs tailored for embedded mode, adapting to `location` vs `path`.
+        Does *not* include host/port.
+        """
+        kwargs = dict(self.kwargs)
+
+        # Prefer explicit local_path if provided
+        if "local_path" in kwargs:
+            local = kwargs.pop("local_path")
+            # Choose the parameter name supported by the relevant client class
+            ClientClass = AsyncQdrantClient if for_async else QdrantClient
+            if self._supports_param(ClientClass, "location"):
+                kwargs["location"] = local
+                self._embedded_param_used = "location"
+            elif self._supports_param(ClientClass, "path"):
+                kwargs["path"] = local
+                self._embedded_param_used = "path"
+            else:
+                raise ValueError(
+                    "Installed qdrant-client does not accept 'location' or 'path' for embedded mode"
+                )
+            return kwargs
+
+        # If caller supplied location or path already, make sure it's supported; if not, try to swap
+        ClientClass = AsyncQdrantClient if for_async else QdrantClient
+        if "location" in kwargs or "path" in kwargs:
+            if "location" in kwargs and not self._supports_param(ClientClass, "location"):
+                # try swap to path
+                value = kwargs.pop("location")
+                if self._supports_param(ClientClass, "path"):
+                    kwargs["path"] = value
+                    self._embedded_param_used = "path"
+                else:
+                    raise ValueError(
+                        "'location' not supported by installed qdrant-client, and 'path' also unavailable"
+                    )
+            elif "path" in kwargs and not self._supports_param(ClientClass, "path"):
+                # try swap to location
+                value = kwargs.pop("path")
+                if self._supports_param(ClientClass, "location"):
+                    kwargs["location"] = value
+                    self._embedded_param_used = "location"
+                else:
+                    raise ValueError(
+                        "'path' not supported by installed qdrant-client, and 'location' also unavailable"
+                    )
+            else:
+                self._embedded_param_used = "location" if "location" in kwargs else "path"
+            return kwargs
+
+        # Should not reach here if is_embedded True
+        return kwargs
+
+    # ---------- Client init ----------
 
     def get_client(self) -> QdrantClient:
         if not hasattr(self, "client"):
@@ -53,19 +153,91 @@ class QdrantVectorstore(Vectorstore):
         return self.client
 
     def _get_a_client(self) -> AsyncQdrantClient:
-        if not hasattr(self, "a_client"):
+        if not hasattr(self, "a_client") or self.a_client is None:
             self._init_a_client()
+        assert self.a_client is not None, (
+            "Async client not available in embedded mode on this environment. "
+            "Use sync methods or run Qdrant server for async."
+        )
         return self.a_client
 
     def _init_client(self):
-        self.client = QdrantClient(
-            host=self.host, port=self.port, api_key=self.api_key, **self.kwargs
-        )
+        version_str = self._get_qdrant_client_version()
+        if self.is_embedded:
+            # --- NUOVO: ripulisce env che forzano il remote ---
+            for k in ("QDRANT_URL", "QDRANT__URL", "QDRANT_HOST", "QDRANT__HOST"):
+                if os.getenv(k):
+                    log.warning("Embedded mode: clearing env %s='%s'", k, os.getenv(k))
+                    os.environ.pop(k, None)
+    
+            kwargs = self._normalize_embedded_kwargs(for_async=False)
+            # Non passare host/port/api_key in embedded
+            kwargs.pop("host", None)
+            kwargs.pop("port", None)
+            kwargs.pop("api_key", None)
+    
+            self.client = QdrantClient(**kwargs)
+            log.info(
+                "Qdrant client %s detected; initializing in EMBEDDED mode using %s=...",
+                version_str,
+                self._embedded_param_used or "location/path",
+            )
+    
+            # --- NUOVO: verifica che sia davvero Local ---
+            backend_name = getattr(getattr(self.client, "_client", None), "__class__", type(None)).__name__
+            if backend_name.lower().find("local") < 0:
+                raise RuntimeError(
+                    f"Expected embedded backend but got '{backend_name}'. "
+                    f"Kwargs={kwargs}. Check env and qdrant-client version."
+                )
+    
+        else:
+            self.client = QdrantClient(
+                host=self.host, port=self.port, api_key=self.api_key, **self.kwargs
+            )
+            log.info(
+                "Qdrant client %s detected; initializing in REMOTE mode (host=%s, port=%s)",
+                version_str,
+                self.host,
+                self.port,
+            )
+
 
     def _init_a_client(self):
-        self.a_client = AsyncQdrantClient(
-            host=self.host, port=self.port, api_key=self.api_key, **self.kwargs
-        )
+        version_str = self._get_qdrant_client_version()
+        if self.is_embedded:
+            # Try to init async embedded; if it fails, keep None and warn
+            try:
+                kwargs = self._normalize_embedded_kwargs(for_async=True)
+                kwargs.pop("host", None)
+                kwargs.pop("port", None)
+                kwargs.pop("api_key", None)
+                self.a_client = AsyncQdrantClient(**kwargs)
+                log.info(
+                    "Qdrant client %s detected; async EMBEDDED client initialized using %s=...",
+                    version_str,
+                    self._embedded_param_used or "location/path",
+                )
+            except Exception as e:
+                self.a_client = None
+                log.warning(
+                    "Async embedded client not available (qdrant-client %s). "
+                    "Falling back to sync-only. Reason: %s",
+                    version_str,
+                    e,
+                )
+        else:
+            self.a_client = AsyncQdrantClient(
+                host=self.host, port=self.port, api_key=self.api_key, **self.kwargs
+            )
+            log.info(
+                "Qdrant client %s detected; initializing async REMOTE client (host=%s, port=%s)",
+                version_str,
+                self.host,
+                self.port,
+            )
+
+    # ---------- CRUD ----------
 
     def add(self, chunk: Chunk | list[Chunk], collection_name: str | None = None):
         """Add a single chunk or list of chunks to the vectorstore.
@@ -81,8 +253,8 @@ class QdrantVectorstore(Vectorstore):
         chunks = [chunk] if isinstance(chunk, Chunk) else chunk
         points = []
 
-        for chunk in chunks:
-            points.append(self._process_chunk(chunk))
+        for ch in chunks:
+            points.append(self._process_chunk(ch))
 
         # TODO: Process in batches
         for p in points:
@@ -103,8 +275,8 @@ class QdrantVectorstore(Vectorstore):
         chunks = [chunk] if isinstance(chunk, Chunk) else chunk
         points = []
 
-        for chunk in chunks:
-            points.append(self._process_chunk(chunk))
+        for ch in chunks:
+            points.append(self._process_chunk(ch))
 
         # TODO: Process in batches
         for p in points:
@@ -121,7 +293,7 @@ class QdrantVectorstore(Vectorstore):
         if not chunk.embeddings:
             raise ValueError("Chunk must have an embedding")
 
-        vector = {}
+        vector: Any = {}
         if len(chunk.embeddings) == 1:
             if isinstance(chunk.embeddings[0], DenseEmbedding):
                 vector = chunk.embeddings[0].vector
@@ -155,7 +327,7 @@ class QdrantVectorstore(Vectorstore):
             vector=vector,  # type: ignore
         )
 
-    def update(self, collection_name: str, payload: dict, points: list[int], **kwargs):
+    def update(self, collection_name: str, payload: dict, points: list[int] | list[str], **kwargs):
         client = self.get_client()
         client.overwrite_payload(
             collection_name=collection_name,
@@ -326,7 +498,7 @@ class QdrantVectorstore(Vectorstore):
         collection_name: str,
         page_size: int = 100,
         with_vectors: bool = False,
-    ) -> Generator[Chunk, None, None]:
+    ) -> "Generator[Chunk, None, None]":
         """
         Dumps all points from a collection in a chunk-wise manner.
 
